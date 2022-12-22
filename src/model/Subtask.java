@@ -1,7 +1,7 @@
-package tasks;
+package model;
 
 public class Subtask extends Task{
-    protected int epicId;
+    private int epicId;
 
     public Subtask(String nameSubtask, String discriptionSubtask) {
         super(nameSubtask, discriptionSubtask);
@@ -18,6 +18,6 @@ public class Subtask extends Task{
 
     @Override
     public String toString() {
-        return name +" "  + getId() + " "+ getStatus() + " "+ epicId;
+        return name +" "  + getId() + " "+ getStatuses() + " "+ epicId;
     }
 }
