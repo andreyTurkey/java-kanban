@@ -2,26 +2,22 @@ package model;
 
 public class Task {
     protected int id;
-    public String name;
-    public String discription;
-
-    protected Statuses statuses;
-
+    protected String name;
+    protected String discription;
+    protected Status status;
 
     public Task(String nameTask, String discription) {
         name = nameTask;
         this.discription = discription;
-        statuses = Statuses.NEW;
-
-
+        status = Status.NEW;
     }
 
-    public void setStatuses(Statuses statuses) {
-        this.statuses = statuses;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
-    public Statuses getStatuses() {
-        return statuses;
+    public Status getStatus() {
+        return status;
     }
 
     public int getId() {
@@ -32,10 +28,9 @@ public class Task {
         this.id = id;
     }
 
-
     @Override
     public String toString() {
-        return name + " " + getId() + " " + getStatuses();
+        return name + " " + getId() + " " + getStatus();
     }
 }
 

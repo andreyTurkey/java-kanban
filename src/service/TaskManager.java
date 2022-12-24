@@ -3,7 +3,7 @@ package service;
 import model.Task;
 import model.Subtask;
 import model.Epic;
-import model.Statuses;
+import model.Status;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +13,7 @@ public class TaskManager {
 
     private HashMap<Integer, Task> tasksStorages = new HashMap();
     private HashMap<Integer, Epic> epicsStorage = new HashMap();
-    HashMap<Integer, Subtask> subtaksStorage = new HashMap();
+    private HashMap<Integer, Subtask> subtaksStorage = new HashMap();
 
     public int addNewTask(Task task) {
         task.setId(counter++);
@@ -109,19 +109,8 @@ public class TaskManager {
         return subtask.getId();
     }
 
-    public ArrayList<Integer> getSubtasksOfEpic(Epic epic) {
-        ArrayList<Integer> newListSubtasks = new ArrayList<>();
-        for (Integer idSubs : subtaksStorage.keySet()) {
-            Subtask newSub = subtaksStorage.get(idSubs);
-            if (epic.getId() == newSub.getEpicId()) {
-                newListSubtasks.add(idSubs);
-            }
-        }
-        return newListSubtasks;
-    }
-
     public void updateStatus(Epic epic) {
-        ArrayList<Integer> idlistSubtasks = getSubtasksOfEpic(epic);
+        ArrayList<Integer> idlistSubtasks = epic.getSubtaskIds();
 
         ArrayList<Subtask> listSubtasks = new ArrayList<>();
         for (Integer idSub : subtaksStorage.keySet()) {
@@ -132,24 +121,24 @@ public class TaskManager {
             }
         }
         for (Subtask anySub : listSubtasks) {
-            if (!(anySub.getStatuses() == Statuses.NEW)) {
-                epic.setStatuses(Statuses.IN_PROGRESS);
+            if (!(anySub.getStatus() == Status.NEW)) {
+                epic.setStatus(Status.IN_PROGRESS);
                 break;
             }
         }
         for (Subtask anySub : listSubtasks) {
-            if (!(anySub.getStatuses() == Statuses.DONE)) {
+            if (!(anySub.getStatus() == Status.DONE)) {
                 break;
             } else {
-                epic.setStatuses(Statuses.DONE);
+                epic.setStatus(Status.DONE);
             }
         }
         if (listSubtasks.isEmpty()) {
-            epic.setStatuses(Statuses.NEW);
+            epic.setStatus(Status.NEW);
         }
         for (Subtask anySub : listSubtasks) {
-            if (anySub.getStatuses() == Statuses.IN_PROGRESS) {
-                epic.setStatuses(Statuses.IN_PROGRESS);
+            if (anySub.getStatus() == Status.IN_PROGRESS) {
+                epic.setStatus(Status.IN_PROGRESS);
                 break;
             }
         }

@@ -1,4 +1,4 @@
-import model.Statuses;
+import model.Status;
 import service.TaskManager;
 import model.Task;
 import model.Epic;
@@ -18,7 +18,7 @@ public class Main {
 
         taskManager.printTask();
 
-        task1.setStatuses(Statuses.DONE);
+        task1.setStatus(Status.DONE);
         taskManager.updatingTask(task1);
 
         System.out.println();
@@ -53,8 +53,8 @@ public class Main {
 
         System.out.println();
 
-        subtask2.setStatuses(Statuses.DONE);
-        subtask3.setStatuses(Statuses.DONE);
+        subtask2.setStatus(Status.DONE);
+        subtask3.setStatus(Status.DONE);
 
         taskManager.updatingEpic(epic1);
         taskManager.updatingEpic(epic2);
