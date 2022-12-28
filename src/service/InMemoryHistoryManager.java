@@ -7,13 +7,13 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final int maxLines = 10;
+    private final int MAX_HISTORY_SIZE = 10;
 
-    public List<Task> history = new ArrayList<>();
+    private List<Task> history = new ArrayList<>();
 
     @Override
     public void add(Task task) {
-        if (history.size() == maxLines) {
+        if (history.size() == MAX_HISTORY_SIZE) {
             history.remove(0);
         }
         history.add(task);

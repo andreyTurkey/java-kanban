@@ -44,9 +44,9 @@ public class Main {
         Subtask subtask2 = new Subtask("Подзадача два", "Описание");
         Subtask subtask3 = new Subtask("Подзадача три", "Описание");
 
-        taskManager.addNewSubtaskAndUpdate(subtask1);
-        taskManager.addNewSubtaskAndUpdate(subtask2);
-        taskManager.addNewSubtaskAndUpdate(subtask3);
+        taskManager.addNewSubtask(subtask1);
+        taskManager.addNewSubtask(subtask2);
+        taskManager.addNewSubtask(subtask3);
 
         subtask1.setEpicId(3);
         subtask2.setEpicId(4);

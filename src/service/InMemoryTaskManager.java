@@ -15,7 +15,7 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, Epic> epicsStorage = new HashMap();
     private HashMap<Integer, Subtask> subtaksStorage = new HashMap();
 
-    public HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    private HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
 
     @Override
     public int addNewTask(Task task) {
@@ -25,7 +25,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public int updatingTask(Task task) {
+    public int updateTask(Task task) {
         int idTask = task.getId();
         for (Integer idMap : tasksStorages.keySet()) {
             if (idTask == idMap) {
@@ -47,7 +47,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public int updatingEpic(Epic epic) {
+    public int updateEpic(Epic epic) {
         int idEpic = epic.getId();
         for (Integer idMapEpic : epicsStorage.keySet()) {
             if (idEpic == idMapEpic) {
@@ -66,7 +66,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public int addNewSubtaskAndUpdate(Subtask subtask) {
+    public int addNewSubtask(Subtask subtask) {
         int idSubtask = subtask.getId();
         if (subtaksStorage.isEmpty()) {
             if (subtask.getId() == 0) {

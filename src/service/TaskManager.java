@@ -11,13 +11,13 @@ public interface TaskManager {
 
     public int addNewTask(Task task);
 
-    public int updatingTask(Task task);
+    public int updateTask(Task task);
 
     public int addNewEpic(Epic epic);
 
-    public int updatingEpic(Epic epic);
+    public int updateEpic(Epic epic);
 
-    public int addNewSubtaskAndUpdate(Subtask subtask);
+    public int addNewSubtask(Subtask subtask);
 
     public void updateStatus(Epic epic);
 
