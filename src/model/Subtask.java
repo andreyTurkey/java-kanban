@@ -1,6 +1,6 @@
 package model;
 
-public class Subtask extends Task{
+public class Subtask extends Task {
     private int epicId;
 
     public Subtask(String nameSubtask, String discriptionSubtask) {
@@ -18,6 +18,6 @@ public class Subtask extends Task{
 
     @Override
     public String toString() {
-        return name +" "  + getId() + " "+ getStatus() + " "+ epicId;
+        return name + " " + getId() + " " + getStatus() + " " + epicId;
     }
 }
