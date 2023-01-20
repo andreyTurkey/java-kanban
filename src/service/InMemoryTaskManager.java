@@ -1,9 +1,6 @@
 package service;
 
-import model.Task;
-import model.Subtask;
-import model.Epic;
-import model.Status;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -190,7 +187,8 @@ public class InMemoryTaskManager implements TaskManager {
     // Методы получения по ID
     @Override
     public Task getWithIdTask(int id) {
-        inMemoryHistoryManager.add(tasksStorages.get(id));
+        Task task = tasksStorages.get(id);
+        inMemoryHistoryManager.add(task);
         return tasksStorages.get(id);
     }
 
@@ -212,18 +210,21 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public HashMap<Integer, Task> removeTask(int idRemovedTask) {
         tasksStorages.remove(idRemovedTask);
+        inMemoryHistoryManager.remove(idRemovedTask);
         return tasksStorages;
     }
 
     @Override
     public HashMap<Integer, Epic> removeEpic(int idRemovedEpic) {
         epicsStorage.remove(idRemovedEpic);
+        inMemoryHistoryManager.remove(idRemovedEpic);
         return epicsStorage;
     }
 
     @Override
     public HashMap<Integer, Subtask> removeSubtask(int idRemovedSubtasks) {
         subtaksStorage.remove(idRemovedSubtasks);
+        inMemoryHistoryManager.remove(idRemovedSubtasks);
         return subtaksStorage;
     }
 
@@ -256,6 +257,14 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
+    public void printMap(){
+        HashMap<Integer, Node> taskForPrint = inMemoryHistoryManager.fromMap();
+        for (Integer id : taskForPrint.keySet()) {
+            Node node = taskForPrint.get(id);
+            System.out.println(id + " " + node);
+        }
+    }
 }
 
 

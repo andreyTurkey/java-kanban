@@ -1,4 +1,3 @@
-import model.Status;
 import service.*;
 import model.Task;
 import model.Epic;
@@ -14,31 +13,29 @@ public class Main {
         Task task2 = new Task("Задача Два", "Описание");
         Task task3 = new Task("Задача Три", "Описание");
         Task task4 = new Task("Задача Четыре", "Описание");
+        Task task5 = new Task("Задача Пять", "Описание");
+        Task task6 = new Task("Задача Шесть", "Описание");
+        Task task7 = new Task("Задача Семь", "Описание");
+        Task task8 = new Task("Задача Восемь", "Описание");
+        Task task9 = new Task("Задача Девять", "Описание");
+        Task task10 = new Task("Задача Десять", "Описание");
+        Task task11 = new Task("Задача Одинадцать", "Описание");
         taskManager.addNewTask(task1);
         taskManager.addNewTask(task2);
         taskManager.addNewTask(task3);
         taskManager.addNewTask(task4);
-
-        //taskManager.printTask();
-
-        task1.setStatus(Status.DONE);
-        //taskManager.updatingTask(task1);
-
-        System.out.println();
-
-        //taskManager.printTask();
-
-        System.out.println();
+        taskManager.addNewTask(task5);
+        taskManager.addNewTask(task6);
+        taskManager.addNewTask(task7);
+        taskManager.addNewTask(task8);
+        taskManager.addNewTask(task9);
+        taskManager.addNewTask(task10);
+        taskManager.addNewTask(task11);
 
         Epic epic1 = new Epic("Эпик Задача Один", "Описание");
         Epic epic2 = new Epic("Эпик Задача Два", "Описание");
-
         taskManager.addNewEpic(epic1);
         taskManager.addNewEpic(epic2);
-
-        //taskManager.printEpic();
-
-        System.out.println();
 
         Subtask subtask1 = new Subtask("Подзадача один", "Описание");
         Subtask subtask2 = new Subtask("Подзадача два", "Описание");
@@ -48,54 +45,44 @@ public class Main {
         taskManager.addNewSubtask(subtask2);
         taskManager.addNewSubtask(subtask3);
 
-        subtask1.setEpicId(3);
-        subtask2.setEpicId(4);
-        //subtask3.setEpicId(4);
-
-        //taskManager.printSubtask();
-
-        System.out.println();
-
-        subtask2.setStatus(Status.DONE);
-        subtask3.setStatus(Status.DONE);
-
-        //taskManager.updatingEpic(epic1);
-        //taskManager.updatingEpic(epic2);
-
-        //taskManager.printEpic();
-
-        System.out.println();
-
-        //HashMap<Integer, Task> removedTasks = taskManager.removeTask(1);
-        //HashMap<Integer, Epic> removedEpics = taskManager.removeEpic(3);
-        //HashMap<Integer, Subtask> removedSubtasks = taskManager.removeSubtask(5);
-
-        //taskManager.printTask();
-        //taskManager.printEpic();
-        //taskManager.printSubtask();
-
-        System.out.println();
-
-        //taskManager.clearSubtasks();
-
-        //taskManager.printSubtask();
-        //System.out.println();
         taskManager.getWithIdTask(1);
         taskManager.getWithIdTask(2);
         taskManager.getWithIdTask(3);
         taskManager.getWithIdTask(4);
-        taskManager.getWithIdEpics(5);
-        taskManager.getWithIdEpics(5);
-        taskManager.getWithIdSubtasks(7);
-        taskManager.getWithIdSubtasks(7);
-        taskManager.getWithIdSubtasks(7);
-        taskManager.getWithIdSubtasks(7);
-        taskManager.getWithIdSubtasks(7);
-        taskManager.getWithIdSubtasks(7);
+        taskManager.getWithIdTask(5);
+        taskManager.getWithIdTask(6);
+        taskManager.getWithIdTask(7);
+        taskManager.getWithIdTask(8);
+        taskManager.getWithIdTask(9);
+        taskManager.getWithIdTask(1);
+        taskManager.getWithIdTask(1);
+        taskManager.getWithIdTask(1);
+        taskManager.getWithIdTask(2);
+        taskManager.getWithIdTask(2);
+        taskManager.getWithIdTask(3);
+        taskManager.getWithIdTask(4);
+        taskManager.getWithIdTask(5);
+
+        taskManager.getWithIdEpics(12);
+        taskManager.getWithIdEpics(13);
+
+        taskManager.getWithIdTask(10);
+        taskManager.getWithIdTask(11);
+
+        taskManager.getWithIdSubtasks(14);
+        taskManager.getWithIdSubtasks(15);
+        taskManager.getWithIdSubtasks(16);
+
+
+        /*taskManager.removeTask(1);
+        taskManager.removeEpic(12);
+        taskManager.removeSubtask(14);*/
 
         taskManager.printHistory();
 
+        System.out.println();
 
+        taskManager.printMap();
     }
 }
 

@@ -46,7 +46,16 @@ public class Task {
 
     @Override
     public String toString() {
+
         return name + " " + getId() + " " + getStatus();
+    }
+
+    @Override
+    public boolean equals(Object task) {
+        if (this == task) return true;
+        if (task == null || getClass() != task.getClass()) return false;
+        Task otherTask = (Task) task;
+        return id == otherTask.getId();
     }
 }
 

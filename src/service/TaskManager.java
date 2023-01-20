@@ -56,6 +56,8 @@ public interface TaskManager {
     public void printSubtask();
 
     public void printHistory();
+
+    public void printMap();
 }
 
 
