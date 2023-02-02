@@ -5,9 +5,9 @@ import model.Subtask;
 
 public class Main {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
-        TaskManager taskManager = Managers.getDefault();
+        TaskManager taskManager = Managers.getDefaultFileBacked();
 
         Task task1 = new Task("Задача Один", "Описание");
         Task task2 = new Task("Задача Два", "Описание");
@@ -40,10 +40,9 @@ public class Main {
         Subtask subtask1 = new Subtask("Подзадача один", "Описание");
         Subtask subtask2 = new Subtask("Подзадача два", "Описание");
         Subtask subtask3 = new Subtask("Подзадача три", "Описание");
-
-        taskManager.addNewSubtask(subtask1);
-        taskManager.addNewSubtask(subtask2);
-        taskManager.addNewSubtask(subtask3);
+        taskManager.addSubtask(subtask1);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
 
         taskManager.getWithIdTask(1);
         taskManager.getWithIdTask(2);
@@ -74,16 +73,16 @@ public class Main {
         taskManager.getWithIdSubtasks(16);
 
 
-        /*taskManager.removeTask(1);
+        *//*taskManager.removeTask(1);
         taskManager.removeEpic(12);
-        taskManager.removeSubtask(14);*/
+        taskManager.removeSubtask(14);*//*
 
         taskManager.printHistory();
 
         System.out.println();
 
         taskManager.printMap();
-    }
+    }*/
 }
 
 

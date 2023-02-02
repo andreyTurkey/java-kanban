@@ -4,20 +4,22 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface TaskManager {
 
-    public int addNewTask(Task task);
+    public void addNewTask(Task task) throws IOException;
 
-    public int updateTask(Task task);
+    public void updateTask(Task task) throws IOException;
 
-    public int addNewEpic(Epic epic);
+    public void addNewEpic(Epic epic) throws IOException;
 
-    public int updateEpic(Epic epic);
+    public void updateEpic(Epic epic) throws IOException;
 
-    public int addNewSubtask(Subtask subtask);
+    public void addSubtask(Subtask subtask) throws IOException;
 
     public void updateStatus(Epic epic);
 
@@ -36,11 +38,11 @@ public interface TaskManager {
     public HashMap<Integer, Subtask> clearSubtasks();
 
     // Методы получения по ID
-    public Task getWithIdTask(int id);
+    public Task getWithIdTask(int id) throws IOException;
 
-    public Epic getWithIdEpics(int id);
+    public Epic getWithIdEpics(int id) throws IOException;
 
-    public Subtask getWithIdSubtasks(int id);
+    public Subtask getWithIdSubtasks(int id) throws IOException;
 
     // Методы удаления задач по ID
     public HashMap<Integer, Task> removeTask(int idRemovedTask);
@@ -58,6 +60,13 @@ public interface TaskManager {
     public void printHistory();
 
     public void printMap();
+
+    public void taskFromFile(Task task);
+
+    public void epicFromFile(Epic epic);
+
+    public void subtaskFromFile(Subtask subtask);
+
 }
 
 

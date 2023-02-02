@@ -5,6 +5,7 @@ public class Task {
     protected String name;
     protected String discription;
     protected Status status;
+    protected Type type = Type.TASK;
 
     public Task(String nameTask, String discription) {
         name = nameTask;
@@ -44,10 +45,22 @@ public class Task {
         this.discription = discription;
     }
 
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
     @Override
     public String toString() {
 
         return name + " " + getId() + " " + getStatus();
+    }
+
+    public String toString(Task task) {
+        return String.format("%d,%S,%s,%S,%s,\n", id, type, name, status, discription);
     }
 
     @Override
@@ -56,6 +69,24 @@ public class Task {
         if (task == null || getClass() != task.getClass()) return false;
         Task otherTask = (Task) task;
         return id == otherTask.getId();
+    }
+
+    public Task fromString(String value) {
+        Task task = new Task("", "");
+        String[] parts = value.split(",");
+        task.setId(Integer.parseInt(parts[0]));
+        task.setType(Type.TASK);
+        task.setName(parts[2]);
+        if (parts[3].equals("NEW")) {
+            task.setStatus(Status.NEW);
+        } else if (parts[3].equals("IN_PROGRESS")) {
+            task.setStatus(Status.IN_PROGRESS);
+        } else {
+            task.setStatus(Status.DONE);
+        }
+        task.setDiscription(parts[4]);
+
+        return task;
     }
 }
 

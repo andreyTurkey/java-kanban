@@ -2,27 +2,27 @@ package service;
 
 import model.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int counter = 1;
-    private HashMap<Integer, Task> tasksStorages = new HashMap();
-    private HashMap<Integer, Epic> epicsStorage = new HashMap();
-    private HashMap<Integer, Subtask> subtaksStorage = new HashMap();
+    protected int counter = 1;
+    protected HashMap<Integer, Task> tasksStorages = new HashMap();
+    protected HashMap<Integer, Epic> epicsStorage = new HashMap();
+    protected HashMap<Integer, Subtask> subtaksStorage = new HashMap();
 
-    private HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
+    protected HistoryManager inMemoryHistoryManager = Managers.getDefaultHistory();
 
     @Override
-    public int addNewTask(Task task) {
+    public void addNewTask(Task task) throws IOException {
         task.setId(counter++);
         tasksStorages.put(task.getId(), task);
-        return task.getId();
     }
 
     @Override
-    public int updateTask(Task task) {
+    public void updateTask(Task task) {
         int idTask = task.getId();
         for (Integer idMap : tasksStorages.keySet()) {
             if (idTask == idMap) {
@@ -33,18 +33,16 @@ public class InMemoryTaskManager implements TaskManager {
                 tasksStorages.put(idTask, task);
             }
         }
-        return task.getId();
     }
 
     @Override
-    public int addNewEpic(Epic epic) {
+    public void addNewEpic(Epic epic) throws IOException {
         epic.setId(counter++);
         epicsStorage.put(epic.getId(), epic);
-        return epic.getId();
     }
 
     @Override
-    public int updateEpic(Epic epic) {
+    public void updateEpic(Epic epic) {
         int idEpic = epic.getId();
         for (Integer idMapEpic : epicsStorage.keySet()) {
             if (idEpic == idMapEpic) {
@@ -59,11 +57,10 @@ public class InMemoryTaskManager implements TaskManager {
                 epicsStorage.put(idEpic, epic);
             }
         }
-        return epic.getId();
     }
 
     @Override
-    public int addNewSubtask(Subtask subtask) {
+    public void addSubtask(Subtask subtask) throws IOException {
         int idSubtask = subtask.getId();
         if (subtaksStorage.isEmpty()) {
             if (subtask.getId() == 0) {
@@ -110,7 +107,6 @@ public class InMemoryTaskManager implements TaskManager {
                 }
             }
         }
-        return subtask.getId();
     }
 
     @Override
@@ -186,21 +182,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Методы получения по ID
     @Override
-    public Task getWithIdTask(int id) {
+    public Task getWithIdTask(int id) throws IOException {
         Task task = tasksStorages.get(id);
         inMemoryHistoryManager.add(task);
         return tasksStorages.get(id);
     }
 
     @Override
-    public Epic getWithIdEpics(int id) {
+    public Epic getWithIdEpics(int id) throws IOException {
         Task task = epicsStorage.get(id);
         inMemoryHistoryManager.add(task);
         return epicsStorage.get(id);
     }
 
     @Override
-    public Subtask getWithIdSubtasks(int id) {
+    public Subtask getWithIdSubtasks(int id) throws IOException {
         Task task = subtaksStorage.get(id);
         inMemoryHistoryManager.add(task);
         return subtaksStorage.get(id);
@@ -258,11 +254,33 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void printMap(){
+    public void printMap() {
         HashMap<Integer, Node> taskForPrint = inMemoryHistoryManager.fromMap();
         for (Integer id : taskForPrint.keySet()) {
             Node node = taskForPrint.get(id);
             System.out.println(id + " " + node);
+        }
+    }
+
+    @Override
+    public void taskFromFile(Task task) {
+        tasksStorages.put(task.getId(), task);
+    }
+
+    @Override
+    public void epicFromFile(Epic epic) {
+        epicsStorage.put(epic.getId(), epic);
+    }
+
+    @Override
+    public void subtaskFromFile(Subtask subtask) {
+        int idSubtask = subtask.getId();
+        subtaksStorage.put(idSubtask, subtask);
+        for (Integer idEpic : epicsStorage.keySet()) {
+            if (idEpic == subtask.getId()) {
+                Epic epic = epicsStorage.get(idEpic);
+                epic.addSubtaskInList(subtask.getId());
+            }
         }
     }
 }
