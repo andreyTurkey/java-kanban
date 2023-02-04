@@ -7,9 +7,15 @@ public class Task {
     protected Status status;
     protected Type type = Type.TASK;
 
-    public Task(String nameTask, String discription) {
-        name = nameTask;
+    public Task(String name, String discription) {
+        this.name = name;
         this.discription = discription;
+        status = Status.NEW;
+    }
+
+    public Task() {
+        this.name = "";
+        this.discription = "";
         status = Status.NEW;
     }
 

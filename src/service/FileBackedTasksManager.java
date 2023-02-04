@@ -8,12 +8,11 @@ import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    String file = "History.csv";
+    private static String path = "History.csv";
 
     public static void main(String[] args) throws IOException {
 
-        File newFile = new File("History.csv");
-        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(newFile);
+        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(path));
 
         /*TaskManager taskManager = Managers.getDefaultFileBacked();
 
@@ -93,7 +92,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 taskFromFile.add(line);
             }
         } catch (IOException exc) {
-            System.out.println("Невозможно прочитать файл. Возможно файл не находится в нужной директории.");
+            System.out.println(String.format(
+                    "Невозможно прочитать файл. Возможно файл не находится в %s.", path));
         }
         taskFromFile.remove(0);
         return taskFromFile;
@@ -102,23 +102,24 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void makingTasks(List<String> tasks) throws IOException {
         for (String str : tasks) {
             String[] lines = str.split(",");
-            if (lines[1].equals("TASK")) {
-                Task task = new Task("", "");
+            if (Type.valueOf(lines[1]) == Type.TASK) {
+                Task task = new Task();
                 task = task.fromString(str);
                 taskFromFile(task);
-            } else if (lines[1].equals("EPIC")) {
-                Epic epic = new Epic("", "");
+            }
+            else if (Type.valueOf(lines[1]) == Type.EPIC) {
+                Epic epic = new Epic();
                 epic = epic.fromString(str);
                 epicFromFile(epic);
             } else {
-                Subtask subtask = new Subtask("", "");
+                Subtask subtask = new Subtask();
                 subtask = subtask.fromString(str);
                 subtaskFromFile(subtask);
             }
         }
     }
 
-    public List<String> getListTask(List<String> stringsFromFile) {
+    private List<String> getListTask(List<String> stringsFromFile) {
         List<String> stringsTasks = new ArrayList<>();
         for (String str : stringsFromFile) {
             if (str.equals("")) {
@@ -141,7 +142,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         taskToHistory.addAll(getListSubtask());
         String history = historyToString(inMemoryHistoryManager);
 
-        try (Writer writer = new FileWriter(file)) {
+        try (Writer writer = new FileWriter(path)) {
             writer.write("id,type,name,status,description,epic\n");
             for (Task task : taskToHistory) {
                 if (task.getType() != Type.SUBTASK) {
