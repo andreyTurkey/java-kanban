@@ -31,23 +31,23 @@ public class Epic extends Task {
     }
 
     public String toString(Task task) {
-        return String.format("%d,%S,%s,%S,%s,\n", id, type, name, status, discription);
+        return String.format("%d,%S,%s,%S,%s,\n", id, type, name, status, description);
     }
 
     public Epic fromString(String value) {
-        Epic epic = new Epic("", "");
+        Epic epic = new Epic();
         String[] parts = value.split(",");
-        epic.setId(Integer.parseInt(parts[0]));
+        epic.setId(Integer.parseInt(parts[ID_INDEX]));
         epic.setType(Type.EPIC);
-        epic.setName(parts[2]);
-        if (parts[3].equals("NEW")) {
+        epic.setName(parts[NAME_INDEX]);
+        if (Status.valueOf(parts[STATUS_INDEX]) == Status.NEW) {
             epic.setStatus(Status.NEW);
-        } else if (parts[3].equals("IN_PROGRESS")) {
+        } else if (Status.valueOf(parts[STATUS_INDEX]) == Status.IN_PROGRESS) {
             epic.setStatus(Status.IN_PROGRESS);
         } else {
             epic.setStatus(Status.DONE);
         }
-        epic.setDiscription(parts[4]);
+        epic.setDescription(parts[DESCRIPTION_INDEX]);
 
         return epic;
     }

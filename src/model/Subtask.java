@@ -2,10 +2,11 @@ package model;
 
 public class Subtask extends Task {
     private int epicId;
+    protected static final int EPIC_ID_INDEX = 5;
     private Type type = Type.SUBTASK;
 
-    public Subtask(String nameSubtask, String discriptionSubtask) {
-        super(nameSubtask, discriptionSubtask);
+    public Subtask(String nameSubtask, String descriptionSubtask) {
+        super(nameSubtask, descriptionSubtask);
         this.epicId = epicId;
     }
 
@@ -15,7 +16,7 @@ public class Subtask extends Task {
     }
 
     public Subtask(Task task, int epicId) {
-        super(task.name, task.discription);
+        super(task.name, task.description);
         this.epicId = epicId;
     }
 
@@ -33,24 +34,24 @@ public class Subtask extends Task {
     }
 
     public String toString(Task task) {
-        return String.format("%d,%S,%s,%S,%s,%d\n", id, type, name, status, discription, epicId);
+        return String.format("%d,%S,%s,%S,%s,%d\n", id, type, name, status, description, epicId);
     }
 
     public Subtask fromString(String value) {
         Subtask subtask = new Subtask("", "");
         String[] parts = value.split(",");
-        subtask.setId(Integer.parseInt(parts[0]));
+        subtask.setId(Integer.parseInt(parts[ID_INDEX]));
         subtask.setType(Type.SUBTASK);
-        subtask.setName(parts[2]);
-        if (parts[3].equals("NEW")) {
+        subtask.setName(parts[NAME_INDEX]);
+        if (Status.valueOf(parts[STATUS_INDEX]) == Status.NEW) {
             subtask.setStatus(Status.NEW);
-        } else if (parts[3].equals("IN_PROGRESS")) {
+        } else if (Status.valueOf(parts[STATUS_INDEX]) == Status.IN_PROGRESS) {
             subtask.setStatus(Status.IN_PROGRESS);
         } else {
             subtask.setStatus(Status.DONE);
         }
-        subtask.setDiscription(parts[4]);
-        subtask.setEpicId(Integer.parseInt(parts[5]));
+        subtask.setDescription(parts[DESCRIPTION_INDEX]);
+        subtask.setEpicId(Integer.parseInt(parts[EPIC_ID_INDEX]));
 
         return subtask;
     }

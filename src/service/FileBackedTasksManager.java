@@ -9,6 +9,8 @@ import java.util.List;
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
     private static String path = "History.csv";
+    private static final int TYPE_INDEX = 1;
+
 
     public static void main(String[] args) throws IOException {
 
@@ -42,9 +44,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         taskManager.getWithIdEpics(5);
         taskManager.getWithIdSubtasks(6);
         taskManager.getWithIdSubtasks(7);
-        taskManager.getWithIdSubtasks(8);
+        taskManager.getWithIdSubtasks(8);*/
 
-        taskManager.printHistory();*/
     }
 
     static FileBackedTasksManager loadFromFile(File file) throws IOException {
@@ -102,12 +103,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public void makingTasks(List<String> tasks) throws IOException {
         for (String str : tasks) {
             String[] lines = str.split(",");
-            if (Type.valueOf(lines[1]) == Type.TASK) {
+            if (Type.valueOf(lines[TYPE_INDEX]) == Type.TASK) {
                 Task task = new Task();
                 task = task.fromString(str);
                 taskFromFile(task);
             }
-            else if (Type.valueOf(lines[1]) == Type.EPIC) {
+            else if (Type.valueOf(lines[TYPE_INDEX]) == Type.EPIC) {
                 Epic epic = new Epic();
                 epic = epic.fromString(str);
                 epicFromFile(epic);

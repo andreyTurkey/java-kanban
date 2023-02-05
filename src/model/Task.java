@@ -3,19 +3,24 @@ package model;
 public class Task {
     protected int id;
     protected String name;
-    protected String discription;
+    protected String description;
     protected Status status;
+    protected static final int ID_INDEX = 0;
+    protected static final int NAME_INDEX = 2;
+    protected static final int STATUS_INDEX = 3;
+    protected static final int DESCRIPTION_INDEX = 4;
     protected Type type = Type.TASK;
+
 
     public Task(String name, String discription) {
         this.name = name;
-        this.discription = discription;
+        this.description = discription;
         status = Status.NEW;
     }
 
     public Task() {
         this.name = "";
-        this.discription = "";
+        this.description = "";
         status = Status.NEW;
     }
 
@@ -44,11 +49,11 @@ public class Task {
     }
 
     public String getDiscription() {
-        return discription;
+        return description;
     }
 
-    public void setDiscription(String discription) {
-        this.discription = discription;
+    public void setDescription(String discription) {
+        this.description = description;
     }
 
     public Type getType() {
@@ -66,7 +71,7 @@ public class Task {
     }
 
     public String toString(Task task) {
-        return String.format("%d,%S,%s,%S,%s,\n", id, type, name, status, discription);
+        return String.format("%d,%S,%s,%S,%s,\n", id, type, name, status, description);
     }
 
     @Override
@@ -78,19 +83,19 @@ public class Task {
     }
 
     public Task fromString(String value) {
-        Task task = new Task("", "");
+        Task task = new Task();
         String[] parts = value.split(",");
-        task.setId(Integer.parseInt(parts[0]));
+        task.setId(Integer.parseInt(parts[ID_INDEX]));
         task.setType(Type.TASK);
-        task.setName(parts[2]);
-        if (parts[3].equals("NEW")) {
+        task.setName(parts[NAME_INDEX]);
+        if (Status.valueOf(parts[STATUS_INDEX]) == Status.NEW) {
             task.setStatus(Status.NEW);
-        } else if (parts[3].equals("IN_PROGRESS")) {
+        } else if (Status.valueOf(parts[STATUS_INDEX]) == Status.IN_PROGRESS) {
             task.setStatus(Status.IN_PROGRESS);
         } else {
             task.setStatus(Status.DONE);
         }
-        task.setDiscription(parts[4]);
+        task.setDescription(parts[DESCRIPTION_INDEX]);
 
         return task;
     }
