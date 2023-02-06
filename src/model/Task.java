@@ -1,16 +1,16 @@
 package model;
 
 public class Task {
-    protected int id;
-    protected String name;
-    protected String description;
-    protected Status status;
     protected static final int ID_INDEX = 0;
     protected static final int NAME_INDEX = 2;
     protected static final int STATUS_INDEX = 3;
     protected static final int DESCRIPTION_INDEX = 4;
-    protected Type type = Type.TASK;
 
+    protected int id;
+    protected String name;
+    protected String description;
+    protected Status status;
+    protected Type type = Type.TASK;
 
     public Task(String name, String discription) {
         this.name = name;

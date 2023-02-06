@@ -7,35 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-
     private static String path = "History.csv";
     private static final int TYPE_INDEX = 1;
 
-
     public static void main(String[] args) throws IOException {
-
         FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(path));
 
         /*TaskManager taskManager = Managers.getDefaultFileBacked();
 
-        Task task1 = new Task("Задача Один", "Описание");
-        Task task2 = new Task("Задача Два", "Описание");
-        Task task3 = new Task("Задача Три", "Описание");
-        taskManager.addNewTask(task1);
-        taskManager.addNewTask(task2);
-        taskManager.addNewTask(task3);
+        taskManager.addNewTask(new Task("Задача Один", "Описание"));
+        taskManager.addNewTask(new Task("Задача Два", "Описание"));
+        taskManager.addNewTask(new Task("Задача Три", "Описание"));
 
-        Epic epic1 = new Epic("Эпик Задача Один", "Описание");
-        Epic epic2 = new Epic("Эпик Задача Два", "Описание");
-        taskManager.addNewEpic(epic1);
-        taskManager.addNewEpic(epic2);
+        taskManager.addNewEpic(new Epic("Эпик Задача Один", "Описание"));
+        taskManager.addNewEpic(new Epic("Эпик Задача Два", "Описание"));
 
-        Subtask subtask1 = new Subtask("Подзадача один", "Описание");
-        Subtask subtask2 = new Subtask("Подзадача два", "Описание");
-        Subtask subtask3 = new Subtask("Подзадача три", "Описание");
-        taskManager.addSubtask(subtask1);
-        taskManager.addSubtask(subtask2);
-        taskManager.addSubtask(subtask3);
+        taskManager.addSubtask(new Subtask("Подзадача один", "Описание"));
+        taskManager.addSubtask(new Subtask("Подзадача два", "Описание"));
+        taskManager.addSubtask(new Subtask("Подзадача три", "Описание"));
 
         taskManager.getWithIdTask(3);
         taskManager.getWithIdTask(1);
@@ -45,7 +34,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         taskManager.getWithIdSubtasks(6);
         taskManager.getWithIdSubtasks(7);
         taskManager.getWithIdSubtasks(8);*/
-
     }
 
     static FileBackedTasksManager loadFromFile(File file) throws IOException {
