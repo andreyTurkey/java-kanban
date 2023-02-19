@@ -1,18 +1,27 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private int epicId;
+
     protected static final int EPIC_ID_INDEX = 5;
+    protected static final int DURATION_INDEX = 6;
+    protected static final int STARTTIME_INDEX = 7;
+
     private Type type = Type.SUBTASK;
 
     public Subtask(String nameSubtask, String descriptionSubtask) {
         super(nameSubtask, descriptionSubtask);
-        this.epicId = epicId;
+    }
+
+    public Subtask(String nameTask, String discription, String startTime, int durationMinutes) {
+        super(nameTask, discription, startTime, durationMinutes);
     }
 
     public Subtask() {
         super();
-        this.epicId = epicId;
     }
 
     public Subtask(Task task, int epicId) {
@@ -28,17 +37,25 @@ public class Subtask extends Task {
         this.epicId = epicId;
     }
 
+    public void setEpicId(Epic epic) {
+        int epicId = epic.getId();
+        this.epicId = epicId;
+    }
+
     @Override
     public String toString() {
-        return name + " " + getId() + " " + getStatus() + " " + epicId;
+        return name + " " + getId() + " " + getStatus() + " " + epicId +" "+ startTime;
     }
 
     public String toString(Task task) {
+        if (duration != null || startTime != null) {
+            return String.format("%d,%S,%s,%S,%s,%d,%s,%s\n", id, type, name, status, description, epicId, duration, startTime.format(formatter));
+        }
         return String.format("%d,%S,%s,%S,%s,%d\n", id, type, name, status, description, epicId);
     }
 
     public Subtask fromString(String value) {
-        Subtask subtask = new Subtask("", "");
+        Subtask subtask = new Subtask();
         String[] parts = value.split(",");
         subtask.setId(Integer.parseInt(parts[ID_INDEX]));
         subtask.setType(Type.SUBTASK);
@@ -52,7 +69,12 @@ public class Subtask extends Task {
         }
         subtask.setDescription(parts[DESCRIPTION_INDEX]);
         subtask.setEpicId(Integer.parseInt(parts[EPIC_ID_INDEX]));
-
+        try {
+            subtask.setDuration(Duration.parse(parts[DURATION_INDEX]));
+            subtask.setStartTime(LocalDateTime.parse(parts[STARTTIME_INDEX], formatter));
+        } catch (ArrayIndexOutOfBoundsException exc) {
+            return subtask;
+        }
         return subtask;
     }
 }

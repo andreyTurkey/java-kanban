@@ -3,11 +3,13 @@ import model.Task;
 import model.Epic;
 import model.Subtask;
 
+import java.io.IOException;
+
 public class Main {
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
-        TaskManager taskManager = Managers.getDefaultFileBacked();
+        TaskManager taskManager = Managers.getDefault();
 
         Task task1 = new Task("Задача Один", "Описание");
         Task task2 = new Task("Задача Два", "Описание");
@@ -73,16 +75,16 @@ public class Main {
         taskManager.getWithIdSubtasks(16);
 
 
-        *//*taskManager.removeTask(1);
+        taskManager.removeTask(1);
         taskManager.removeEpic(12);
-        taskManager.removeSubtask(14);*//*
+        taskManager.removeSubtask(14);
 
         taskManager.printHistory();
 
         System.out.println();
 
-        taskManager.printMap();
-    }*/
+        //taskManager.printMap();
+    }
 }
 
 

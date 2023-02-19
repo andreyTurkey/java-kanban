@@ -41,7 +41,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public HashMap<Integer, Node> fromMap() {
+    public HashMap<Integer, Node> fromMap() { // Вспомогательный метод
         HashMap<Integer, Node> forPrint = new HashMap<>();
         for (Integer id : linkedHistory.getNodes().keySet()) {
 

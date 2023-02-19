@@ -1,20 +1,38 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
-    private ArrayList<Integer> subtaskIds;
+    protected static final int ENDTIME_INDEX = 7;
 
+    private ArrayList<Integer> subtaskIds;
     private Type type = Type.EPIC;
+    private LocalDateTime endTime;
 
     public Epic(String nameTask, String discription) {
         super(nameTask, discription);
-        subtaskIds = new ArrayList<>();
+        this.subtaskIds = new ArrayList<>();
     }
 
     public Epic() {
         super();
         subtaskIds = new ArrayList<>();
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getEndTimeInString(){
+        String str = endTime.format(formatter);
+        return str;
     }
 
     public ArrayList<Integer> getSubtaskIds() {
@@ -31,7 +49,10 @@ public class Epic extends Task {
     }
 
     public String toString(Task task) {
-        return String.format("%d,%S,%s,%S,%s,\n", id, type, name, status, description);
+        if (duration != null || startTime != null || endTime != null) {
+            return String.format("%d,%S,%s,%S,%s,%s,%s,%s\n", id, type, name, status, description, duration, startTime.format(formatter), endTime.format(formatter));
+        }
+        return String.format("%d,%S,%s,%S,%s\n", id, type, name, status, description);
     }
 
     public Epic fromString(String value) {
@@ -48,8 +69,16 @@ public class Epic extends Task {
             epic.setStatus(Status.DONE);
         }
         epic.setDescription(parts[DESCRIPTION_INDEX]);
-
+        try {
+            epic.setDuration(Duration.parse(parts[DURATION_INDEX]));
+            epic.setStartTime(LocalDateTime.parse(parts[STARTTIME_INDEX], formatter));
+            epic.setEndTime(LocalDateTime.parse(parts[ENDTIME_INDEX], formatter));
+        } catch (ArrayIndexOutOfBoundsException exc) {
+            return epic;
+        }
         return epic;
     }
 }
+
+
 

@@ -1,27 +1,85 @@
 package model;
 
+import javax.swing.text.DateFormatter;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
 public class Task {
     protected static final int ID_INDEX = 0;
     protected static final int NAME_INDEX = 2;
     protected static final int STATUS_INDEX = 3;
     protected static final int DESCRIPTION_INDEX = 4;
+    protected static final int DURATION_INDEX = 5;
+    protected static final int STARTTIME_INDEX = 6;
 
     protected int id;
     protected String name;
     protected String description;
     protected Status status;
-    protected Type type = Type.TASK;
+    protected  Type type = Type.TASK;
+    protected Duration duration;
+    protected LocalDateTime  startTime;
+    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task(String name, String discription) {
         this.name = name;
         this.description = discription;
-        status = Status.NEW;
+        this.status = Status.NEW;
     }
 
     public Task() {
         this.name = "";
         this.description = "";
-        status = Status.NEW;
+        this.status = Status.NEW;
+    }
+
+    public Task(String name, String discription, String startTime, int durationMinutes) {
+        this.name = name;
+        this.description = discription;
+        this.status = Status.NEW;
+        this.startTime = LocalDateTime.parse(startTime, formatter);
+        this.duration = Duration.ofMinutes(durationMinutes);
+    }
+
+    public LocalDateTime getEndTime() {
+        LocalDateTime endTime = startTime.plus(duration);
+        return endTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public String getStartTimeInString(){
+        String str = startTime.format(formatter);
+        return str;
+    }
+
+    public DateTimeFormatter getFormatter() {
+        return formatter;
+    }
+
+    public void setStart(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     public void setStatus(Status status) {
@@ -49,10 +107,12 @@ public class Task {
     }
 
     public String getDiscription() {
+
         return description;
     }
 
-    public void setDescription(String discription) {
+    public void setDescription(String description) {
+
         this.description = description;
     }
 
@@ -67,11 +127,14 @@ public class Task {
     @Override
     public String toString() {
 
-        return name + " " + getId() + " " + getStatus();
+        return name + " " + getId() + " " + getStatus() + startTime.format(formatter) + " " + duration;
     }
 
     public String toString(Task task) {
-        return String.format("%d,%S,%s,%S,%s,\n", id, type, name, status, description);
+        if (duration != null) {
+            return String.format("%d,%S,%s,%S,%s,%s,%s\n", id, type, name, status, description, duration, startTime.format(formatter));
+        }
+        return String.format("%d,%S,%s,%S,%s\n", id, type, name, status, description);
     }
 
     @Override
@@ -80,6 +143,14 @@ public class Task {
         if (task == null || getClass() != task.getClass()) return false;
         Task otherTask = (Task) task;
         return id == otherTask.getId();
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + name.hashCode();
+        result = 31 * result + description.hashCode();
+        return result;
     }
 
     public Task fromString(String value) {
@@ -96,7 +167,12 @@ public class Task {
             task.setStatus(Status.DONE);
         }
         task.setDescription(parts[DESCRIPTION_INDEX]);
-
+        if (duration != null) {
+            task.setDuration(Duration.parse(parts[DURATION_INDEX]));
+        }
+        if (startTime != null) {
+            task.setStartTime(LocalDateTime.parse(parts[STARTTIME_INDEX], formatter));
+        }
         return task;
     }
 }

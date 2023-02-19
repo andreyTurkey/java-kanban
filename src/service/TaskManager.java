@@ -5,11 +5,23 @@ import model.Subtask;
 import model.Task;
 
 import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Set;
 
 public interface TaskManager {
+
+    public HashMap<Integer, Task> getTasksStorages();
+
+    public HashMap<Integer, Epic> getEpicsStorage();
+
+    public HashMap<Integer, Subtask> getSubtaksStorage();
+    public void timeValidator(Task newTask);
+
+    public Set<Task> getPrioritizedTasks();
+
+    public void setDurationAndTimeEpic(Epic epic);
 
     public void addNewTask(Task task) throws IOException;
 
@@ -31,11 +43,11 @@ public interface TaskManager {
     public ArrayList<Subtask> getListSubtask();
 
     // Методы очистки хэш мапы
-    public HashMap<Integer, Task> clearTasks();
+    public HashMap<Integer, Task> clearTasks() throws IOException;
 
-    public HashMap<Integer, Epic> clearEpics();
+    public HashMap<Integer, Epic> clearEpics() throws IOException;
 
-    public HashMap<Integer, Subtask> clearSubtasks();
+    public HashMap<Integer, Subtask> clearSubtasks() throws IOException;
 
     // Методы получения по ID
     public Task getWithIdTask(int id) throws IOException;
@@ -45,11 +57,11 @@ public interface TaskManager {
     public Subtask getWithIdSubtasks(int id) throws IOException;
 
     // Методы удаления задач по ID
-    public HashMap<Integer, Task> removeTask(int idRemovedTask);
+    public HashMap<Integer, Task> removeTask(int idRemovedTask) throws IOException;
 
-    public HashMap<Integer, Epic> removeEpic(int idRemovedEpic);
+    public HashMap<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException;
 
-    public HashMap<Integer, Subtask> removeSubtask(int idRemovedSubtasks);
+    public HashMap<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException;
 
     public void printTask();
 

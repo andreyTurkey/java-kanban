@@ -1,0 +1,380 @@
+package testing;
+
+import model.*;
+
+import org.junit.jupiter.api.Test;
+
+import service.Managers;
+import service.TaskManager;
+
+import java.io.IOException;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+public abstract class TaskManagerTest<T extends TaskManager> {
+
+    private final TaskManager taskManager = Managers.getDefault();
+
+    @Test
+    void getPrioritizedTasks() throws IOException {
+
+        Epic epic = new Epic("Test getPrioritizedEpic1", "Test Test getPrioritizedEpic1 description");
+        taskManager.addNewEpic(epic);
+        Epic epic2 = new Epic("Test getPrioritizedEpic2", "Test Test getPrioritizedEpic2 description");
+        taskManager.addNewEpic(epic2);
+
+        Subtask subtask = new Subtask("Test getPrioritizedSubtask1",
+                "Test getPrioritizedSubtask1 description");
+        Subtask subtask2 = new Subtask("Test getPrioritizedSubtask2",
+                "Test getPrioritizedSubtask2 description",  "07.02.2023 10:00", 45);
+        Subtask subtask3 = new Subtask("Test getPrioritizedSubtask3",
+                "Test getPrioritizedSubtask3 description",  "07.02.2023 11:00", 45);
+
+        subtask.setEpicId(epic);
+        subtask2.setEpicId(epic);
+        subtask3.setEpicId(epic2);
+
+        taskManager.addSubtask(subtask);
+        taskManager.addSubtask(subtask2);
+        taskManager.addSubtask(subtask3);
+
+        taskManager.updateEpic(epic);
+        taskManager.updateEpic(epic2);
+
+        Set<Task> prioritizedTasks = taskManager.getPrioritizedTasks();
+
+        prioritizedTasks.stream().forEach(System.out::println);
+    }
+
+    @Test
+    void timeValidator() throws IOException, IllegalStateException {
+        Task task1 = new Task("Test timeValidator1", "TesttimeValidator1 description");
+        taskManager.addNewTask(task1);
+
+        Task task2 = new Task("Test timeValidator2", "TesttimeValidator2 description",
+                "01.01.2000 09:00", 120);
+        taskManager.addNewTask(task2);
+
+        Task task3 = new Task("Test timeValidator3", "TesttimeValidator3 description");
+        taskManager.addNewTask(task3);
+
+        Epic epic = new Epic("Test timeValidator4", "Test timeValidator4 description");
+        taskManager.addNewEpic(epic);
+
+        Subtask subtask = new Subtask("Test timeValidator5", "Test timeValidator5 description",
+                "01.01.2000 11:00", 60);
+        taskManager.timeValidator(subtask);
+        taskManager.addSubtask(subtask);
+
+        try {
+            Subtask subtask3 = new Subtask("Test timeValidator6", "Test timeValidator6 description",
+                    "01.01.2000 09:00", 60);
+            taskManager.timeValidator(subtask3);
+            taskManager.addSubtask(subtask3);
+        } catch (IllegalStateException exc) {
+            System.out.println(exc.getMessage());
+        }
+
+        Subtask subtask4 = new Subtask("Test timeValidator7", "Test timeValidator7 description",
+                "01.01.2000 08:00", 60);
+        taskManager.timeValidator(subtask4);
+        taskManager.addSubtask(subtask4);
+
+        try {
+            Subtask subtask3 = new Subtask("Test timeValidator8", "Test timeValidator8 description",
+                    "01.01.2000 06:00", 241);
+            taskManager.timeValidator(subtask3);
+            taskManager.addSubtask(subtask3);
+        } catch (IllegalStateException exc) {
+            System.out.println(exc.getMessage());
+        }
+
+    }
+
+    @Test
+    void addNewTask() throws IOException {
+        Task task = new Task("Test addNewTask", "Test addNewTask description");
+        taskManager.addNewTask(task);
+        final int taskId = task.getId();
+
+        final Task savedTask = taskManager.getWithIdTask(taskId);
+
+        assertNotNull(savedTask, "Задача не найдена.");
+        assertEquals(task, savedTask, "Задачи не совпадают.");
+
+        final List<Task> tasks = taskManager.getListTask();
+
+        assertNotNull(tasks, "Задачи на возвращаются.");
+        assertEquals(1, tasks.size(), "Неверное количество задач.");
+        assertEquals(task, tasks.get(0), "Задачи не совпадают.");
+    }
+
+    @Test
+    void updateTask() throws IOException {
+        Task task = new Task("Test updateTask", "Test updateTask description");
+        taskManager.addNewTask(task);
+        Task task1 = new Task("Test updateTask1", "Test updateTask1 description");
+        taskManager.addNewTask(task1);
+
+        task1.setDescription("Changed Task");
+
+        taskManager.updateTask(task1);
+        final Task savedTask = taskManager.getWithIdTask(2);
+
+        assertEquals(savedTask.getDiscription(), "Changed Task", "Задачи не совпадают.");
+
+    }
+
+    @Test
+    void addNewEpic() throws IOException {
+        Epic epic = new Epic("Test addNewEpic", "Test addNewEpic description");
+        taskManager.addNewEpic(epic);
+
+        final int epicId = epic.getId();
+
+        final Epic savedTask = taskManager.getWithIdEpics(epicId);
+
+        assertNotNull(savedTask, "Задача не найдена.");
+        assertEquals(epic, savedTask, "Задачи не совпадают.");
+
+        final List<Epic> epicks = taskManager.getListEpic();
+
+        assertNotNull(epicks, "Задачи на возвращаются.");
+        assertEquals(1, epicks.size(), "Неверное количество задач.");
+        assertEquals(epic, epicks.get(0), "Задачи не совпадают.");
+    }
+
+    @Test
+    void updateEpic() throws IOException {
+        Epic epic = new Epic("Test updateEpic", "Test updateEpic description");
+        taskManager.addNewEpic(epic);
+
+        List<Integer> subtaskId = epic.getSubtaskIds();
+
+        assertEquals(0, subtaskId.size(), "Новый Эпик возвращает не пустой лист Subtask");
+
+        Subtask subtask = new Subtask("Test updateEpic", "Test updateEpic description");
+        Subtask subtask2 = new Subtask("Test updateEpic", "Test updateEpic description");
+
+        subtask.setEpicId(epic);
+        subtask2.setEpicId(epic);
+
+        int epicId = epic.getId();
+        assertEquals(epicId, subtask.getEpicId(), "Неверный ID Epic.");
+
+        taskManager.addSubtask(subtask);
+        taskManager.addSubtask(subtask2);
+
+        Status statusEpic = epic.getStatus();
+
+        assertEquals(Status.NEW, statusEpic, "Неверный статус задачи.");
+
+        subtask.setStatus(Status.DONE);
+        subtask2.setStatus(Status.DONE);
+
+        taskManager.updateEpic(epic);
+
+        Status SecondStatusEpic = epic.getStatus();
+        assertEquals(Status.DONE, SecondStatusEpic, "Неверный статус задачи.");
+
+        subtask.setStatus(Status.NEW);
+
+        taskManager.updateEpic(epic);
+
+        Status ThirdStatusEpic = epic.getStatus();
+        assertEquals(Status.IN_PROGRESS, ThirdStatusEpic, "Неверный статус задачи.");
+
+        subtask.setStatus(Status.IN_PROGRESS);
+        subtask2.setStatus(Status.IN_PROGRESS);
+
+        taskManager.updateEpic(epic);
+
+        Status FourthStatusEpic = epic.getStatus();
+        assertEquals(Status.IN_PROGRESS, FourthStatusEpic, "Неверный статус задачи.");
+    }
+
+    @Test
+    public void addSubtask() throws IOException {
+        Subtask task = new Subtask("Test addSubtask", "Test addSubtask description");
+        taskManager.addSubtask(task);
+        final int taskId = task.getId();
+
+        final Subtask savedTask = taskManager.getWithIdSubtasks(taskId);
+
+        assertNotNull(savedTask, "Задача не найдена.");
+        assertEquals(task, savedTask, "Задачи не совпадают.");
+
+        final List<Subtask> tasks = taskManager.getListSubtask();
+
+        assertNotNull(tasks, "Задачи на возвращаются.");
+        assertEquals(1, tasks.size(), "Неверное количество задач.");
+        assertEquals(task, tasks.get(0), "Задачи не совпадают.");
+    }
+
+
+    @Test
+    void getListTask() throws IOException {
+        Task task = new Task("Test getListTask", "Test getListTask description");
+        taskManager.addNewTask(task);
+
+        List<Task> tasks = taskManager.getListTask();
+        assertNotNull(tasks, "Задачи на возвращаются.");
+        assertEquals(1, tasks.size(), "Неверное количество задач.");
+        assertEquals(task, tasks.get(0), "Задачи не совпадают.");
+    }
+
+    @Test
+    void getListEpic() throws IOException {
+        Epic epic = new Epic("Test getListEpic", "Test getListEpic description");
+        taskManager.addNewEpic(epic);
+
+        List<Epic> tasks = taskManager.getListEpic();
+        assertNotNull(tasks, "Задачи на возвращаются.");
+        assertEquals(1, tasks.size(), "Неверное количество задач.");
+        assertEquals(epic, tasks.get(0), "Задачи не совпадают.");
+    }
+
+    @Test
+    void getListSubtask() throws IOException {
+        Subtask subtask = new Subtask("Test getListSubtask",
+                "Test getListSubtask description");
+        taskManager.addSubtask(subtask);
+
+        List<Subtask> tasks = taskManager.getListSubtask();
+        assertNotNull(tasks, "Задачи на возвращаются.");
+        assertEquals(1, tasks.size(), "Неверное количество задач.");
+        assertEquals(subtask, tasks.get(0), "Задачи не совпадают.");
+    }
+
+    @Test
+    void clearTasks() throws IOException {
+        Task task = new Task("Test clearTasks", "Test clearTasks description");
+        taskManager.addNewTask(task);
+        Map<Integer, Task> tasks = taskManager.clearTasks();
+
+        assertEquals(0, tasks.size(), "Задачи не удаляются.");
+    }
+
+    @Test
+    void clearEpics() throws IOException {
+        Epic task = new Epic("Test clearEpics", "Test clearEpics description");
+        taskManager.addNewEpic(task);
+        Map<Integer, Epic> tasks = taskManager.clearEpics();
+
+        assertEquals(0, tasks.size(), "Задачи не удаляются.");
+    }
+
+    @Test
+    void clearSubtasks() throws IOException {
+        Subtask task = new Subtask("Test clearSubtasks", "Test clearSubtasks description");
+        taskManager.addSubtask(task);
+        Map<Integer, Subtask> tasks = taskManager.clearSubtasks();
+
+        assertEquals(0, tasks.size(), "Задачи не удаляются.");
+    }
+
+    @Test
+    void getWithIdTask() throws IOException {
+        Task task = new Task("Test getWithIdTask", "Test getWithIdTask description");
+        taskManager.addNewTask(task);
+        Task task1 = taskManager.getWithIdTask(task.getId());
+
+        assertNotNull(task1, "Задачи на возвращаются.");
+        assertEquals(task, task1, "Задачи не совпадают.");
+    }
+
+    @Test
+    void getWithIdEpics() throws IOException {
+        Epic task = new Epic("Test getWithIdEpics", "Test getWithIdEpics description");
+        taskManager.addNewEpic(task);
+        Epic task1 = taskManager.getWithIdEpics(task.getId());
+
+        assertNotNull(task1, "Задачи на возвращаются.");
+        assertEquals(task, task1, "Задачи не совпадают.");
+    }
+
+    @Test
+    void getWithIdSubtasks() throws IOException {
+        Subtask task = new Subtask("Test getWithIdSubtasks",
+                "Test getWithIdSubtasks description");
+        taskManager.addSubtask(task);
+        Subtask task1 = taskManager.getWithIdSubtasks(task.getId());
+
+        assertNotNull(task1, "Задачи на возвращаются.");
+        assertEquals(task, task1, "Задачи не совпадают.");
+    }
+
+    @Test
+    void removeTask() throws IOException {
+        Task task = new Task("Test removeTask", "Test removeTask description");
+        taskManager.addNewTask(task);
+
+        Map<Integer, Task> tasks = taskManager.removeTask(task.getId());
+        taskManager.removeTask(task.getId());
+
+        assertEquals(0, tasks.size(), "Задачи не удаляются.");
+    }
+
+    @Test
+    void removeEpic() throws IOException {
+        Epic task = new Epic("Test removeEpic", "Test removeEpic description");
+        taskManager.addNewEpic(task);
+
+        taskManager.removeEpic(task.getId());
+
+        Map<Integer, Epic> tasks = taskManager.getEpicsStorage();
+
+        assertEquals(0, tasks.size(), "Задачи не удаляются.");
+    }
+
+    @Test
+    void removeSubtask() throws IOException {
+        Epic epic = new Epic("Test getDurationSubtasks", "Test getDurationSubtasks description");
+        taskManager.addNewEpic(epic);
+
+        Subtask task = new Subtask("Test removeSubtask", "Test removeSubtask description");
+        task.setEpicId(epic);
+        taskManager.addSubtask(task);
+
+        Map<Integer, Subtask> tasks = taskManager.removeSubtask(task.getId());
+        taskManager.removeSubtask(task.getId());
+
+        assertEquals(0, tasks.size(), "Задачи не удаляются.");
+    }
+
+    @Test
+    void setDurationEpic() throws IOException {
+        Epic epic = new Epic("Test getDurationSubtasks", "Test getDurationSubtasks description");
+        taskManager.addNewEpic(epic);
+        Subtask subtask = new Subtask("Test getDurationSubtasks",
+                "Test getDurationSubtasks description",
+                "17.02.2023 10:00",
+                120
+        );
+        subtask.setEpicId(epic);
+        taskManager.addSubtask(subtask);
+
+        Subtask subtask2 = new Subtask("Test getDurationSubtasks",
+                "Test getDurationSubtasks description",
+                "18.02.2023 10:00",
+                60);
+        subtask2.setEpicId(epic);
+        taskManager.addSubtask(subtask2);
+
+        taskManager.updateEpic(epic);
+
+        taskManager.setDurationAndTimeEpic(epic);
+
+        int durationEpic = (int) epic.getDuration().toMinutes();
+
+        assertEquals(1500, durationEpic, "Время выполенения эпика расчитывается неверно.");
+        assertEquals("17.02.2023 10:00", epic.getStartTimeInString(),
+                "Дата начала Эпика считается неверно.");
+        assertEquals("18.02.2023 11:00", epic.getEndTimeInString(),
+                "Дата конца Эпика считается неверно.");
+    }
+}

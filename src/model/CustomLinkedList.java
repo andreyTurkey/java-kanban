@@ -57,8 +57,8 @@ public class CustomLinkedList{
 
     public Node<Task> getLast() {
         final Node<Task> l = tail;
-        if (l == null)
-            throw new NoSuchElementException();
+        /*if (l == null)
+            throw new NoSuchElementException();*/
         return l;
     }
 

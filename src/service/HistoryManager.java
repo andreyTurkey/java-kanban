@@ -14,6 +14,6 @@ public interface HistoryManager {
 
     void remove(int id);
 
-    public HashMap<Integer, Node> fromMap();
+    public HashMap<Integer, Node> fromMap(); // Вспомогательный метод
 }
 
