@@ -14,7 +14,6 @@ public class Task {
     protected static final int DESCRIPTION_INDEX = 4;
     protected static final int DURATION_INDEX = 5;
     protected static final int STARTTIME_INDEX = 6;
-
     protected int id;
     protected String name;
     protected String description;
@@ -107,12 +106,10 @@ public class Task {
     }
 
     public String getDiscription() {
-
         return description;
     }
 
     public void setDescription(String description) {
-
         this.description = description;
     }
 
@@ -126,7 +123,6 @@ public class Task {
 
     @Override
     public String toString() {
-
         return name + " " + getId() + " " + getStatus() + startTime.format(formatter) + " " + duration;
     }
 

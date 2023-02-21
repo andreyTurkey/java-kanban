@@ -15,41 +15,28 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class FileBackedTest extends TaskManagerTest<InMemoryTaskManager> {
-
+public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
     private static String pathFile = "HistoryLoadTest.csv";
-    private static String pathEmptyFile = "HistoryEptyTest.csv";
 
-    @Test
-    public void loadFromFile() throws IOException {
-        try {
-            FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(pathFile));
-
-            List<Task> taskHistory = new ArrayList<>();
-            taskHistory.addAll(fileBackedTasksManager.getListTask());
-            taskHistory.addAll(fileBackedTasksManager.getListEpic());
-            taskHistory.addAll(fileBackedTasksManager.getListSubtask());
-
-            assertEquals(8, taskHistory.size(), "Количество задач не совпадает с файлом.");
-
-            String str = fileBackedTasksManager.stringHistory();
-
-            assertEquals("3,1,2,4,5,6,7,8", str, "Количество задач не совпадает с файлом.");
-
-        } catch (NumberFormatException exc) {
-            System.out.println(exc.getMessage());
-        }
+    @Override
+    void setTaskManager(){
+        taskManager = new FileBackedTasksManager();
     }
 
     @Test
-    public void loadFromEmptyFile() throws IOException {
-        try {
-            FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(pathEmptyFile));
-        } catch (NumberFormatException exc) {
-            System.out.println(exc.getMessage());
-        } catch (IndexOutOfBoundsException exc) {
-            System.out.println(exc.getMessage());
-        }
+    public void loadFromFile() throws IOException {
+        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(pathFile));
+
+        List<Task> taskHistory = new ArrayList<>();
+        taskHistory.addAll(fileBackedTasksManager.getListTask());
+        taskHistory.addAll(fileBackedTasksManager.getListEpic());
+        taskHistory.addAll(fileBackedTasksManager.getListSubtask());
+
+        assertEquals(8, taskHistory.size(), "Количество задач не совпадает с файлом.");
+
+        String str = fileBackedTasksManager.stringHistory();
+
+        assertEquals("3,1,2,4,5,6,7,8", str, "Количество задач не совпадает с файлом.");
     }
 
     @Test

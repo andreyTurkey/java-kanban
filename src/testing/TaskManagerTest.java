@@ -2,9 +2,9 @@ package testing;
 
 import model.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import service.Managers;
 import service.TaskManager;
 
 import java.io.IOException;
@@ -16,8 +16,15 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
+    protected T taskManager;
 
-    private final TaskManager taskManager = Managers.getDefault();
+    void setTaskManager() {
+    }
+
+    @BeforeEach
+    void setUp() {
+        setTaskManager();
+    }
 
     @Test
     void getPrioritizedTasks() throws IOException {
@@ -30,9 +37,9 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Subtask subtask = new Subtask("Test getPrioritizedSubtask1",
                 "Test getPrioritizedSubtask1 description");
         Subtask subtask2 = new Subtask("Test getPrioritizedSubtask2",
-                "Test getPrioritizedSubtask2 description",  "07.02.2023 10:00", 45);
+                "Test getPrioritizedSubtask2 description", "07.02.2023 10:00", 45);
         Subtask subtask3 = new Subtask("Test getPrioritizedSubtask3",
-                "Test getPrioritizedSubtask3 description",  "07.02.2023 11:00", 45);
+                "Test getPrioritizedSubtask3 description", "07.02.2023 11:00", 45);
 
         subtask.setEpicId(epic);
         subtask2.setEpicId(epic);
@@ -52,47 +59,35 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void timeValidator() throws IOException, IllegalStateException {
-        Task task1 = new Task("Test timeValidator1", "TesttimeValidator1 description");
+        Task task1 = new Task("Test timeValidator1", "TesttimeValidator1 description",
+                "01.01.2000 09:00", 120);
         taskManager.addNewTask(task1);
 
         Task task2 = new Task("Test timeValidator2", "TesttimeValidator2 description",
-                "01.01.2000 09:00", 120);
+                "01.01.2000 08:00", 60);
         taskManager.addNewTask(task2);
 
-        Task task3 = new Task("Test timeValidator3", "TesttimeValidator3 description");
-        taskManager.addNewTask(task3);
-
-        Epic epic = new Epic("Test timeValidator4", "Test timeValidator4 description");
+        Epic epic = new Epic("Test timeValidator3", "Test timeValidator3 description");
         taskManager.addNewEpic(epic);
 
-        Subtask subtask = new Subtask("Test timeValidator5", "Test timeValidator5 description",
+        Subtask subtask = new Subtask("Test timeValidator4", "Test timeValidator4 description",
                 "01.01.2000 11:00", 60);
-        taskManager.timeValidator(subtask);
         taskManager.addSubtask(subtask);
 
-        try {
-            Subtask subtask3 = new Subtask("Test timeValidator6", "Test timeValidator6 description",
-                    "01.01.2000 09:00", 60);
-            taskManager.timeValidator(subtask3);
-            taskManager.addSubtask(subtask3);
-        } catch (IllegalStateException exc) {
-            System.out.println(exc.getMessage());
-        }
+        Subtask subtask2 = new Subtask("Test timeValidator5", "Test timeValidator5 description",
+                "01.01.2000 07:00", 80);
+        taskManager.addSubtask(subtask2);
+
+        Subtask subtask3 = new Subtask("Test timeValidator6", "Test timeValidator6 description",
+                "01.01.2000 09:00", 90);
+        taskManager.addSubtask(subtask3);
 
         Subtask subtask4 = new Subtask("Test timeValidator7", "Test timeValidator7 description",
-                "01.01.2000 08:00", 60);
-        taskManager.timeValidator(subtask4);
+                "01.01.2000 05:00", 480);
         taskManager.addSubtask(subtask4);
 
-        try {
-            Subtask subtask3 = new Subtask("Test timeValidator8", "Test timeValidator8 description",
-                    "01.01.2000 06:00", 241);
-            taskManager.timeValidator(subtask3);
-            taskManager.addSubtask(subtask3);
-        } catch (IllegalStateException exc) {
-            System.out.println(exc.getMessage());
-        }
-
+        List<Subtask> tasks = taskManager.getListSubtask();
+        System.out.println(tasks);
     }
 
     @Test

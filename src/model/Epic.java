@@ -3,11 +3,12 @@ package model;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task {
     protected static final int ENDTIME_INDEX = 7;
 
-    private ArrayList<Integer> subtaskIds;
+    private List<Integer> subtaskIds;
     private Type type = Type.EPIC;
     private LocalDateTime endTime;
 
@@ -35,16 +36,15 @@ public class Epic extends Task {
         return str;
     }
 
-    public ArrayList<Integer> getSubtaskIds() {
+    public List<Integer> getSubtaskIds() {
         return subtaskIds;
     }
 
-    public void setSubtaskIds(ArrayList<Integer> subtaskIds) {
+    public void setSubtaskIds(List<Integer> subtaskIds) {
         this.subtaskIds = subtaskIds;
     }
 
     public void addSubtaskInList(int subtasksId) {
-
         subtaskIds.add(subtasksId);
     }
 
