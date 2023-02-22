@@ -5,6 +5,7 @@ import model.Task;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface HistoryManager {
 
@@ -14,6 +15,6 @@ public interface HistoryManager {
 
     void remove(int id);
 
-    public HashMap<Integer, Node> fromMap(); // Вспомогательный метод
+    public Map<Integer, Node> fromMap(); // Вспомогательный метод
 }
 

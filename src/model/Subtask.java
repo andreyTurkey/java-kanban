@@ -49,7 +49,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return name + " " + getId() + " " + getStatus() + " " + epicId +" "+ startTime;
+        return name + " " + getId() + " " + getStatus() + " " + epicId + " " + startTime;
     }
 
     public String toString(Task task) {
@@ -76,7 +76,7 @@ public class Subtask extends Task {
         subtask.setEpicId(Integer.parseInt(parts[EPIC_ID_INDEX]));
         try {
             subtask.setDuration(Duration.parse(parts[DURATION_INDEX]));
-            subtask.setStartTime(LocalDateTime.parse(parts[STARTTIME_INDEX], formatter));
+            startTime = LocalDateTime.parse(parts[STARTTIME_INDEX], formatter);
         } catch (ArrayIndexOutOfBoundsException exc) {
             return subtask;
         }

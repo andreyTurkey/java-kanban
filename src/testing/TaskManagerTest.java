@@ -28,7 +28,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     void getPrioritizedTasks() throws IOException {
-
         Epic epic = new Epic("Test getPrioritizedEpic1", "Test Test getPrioritizedEpic1 description");
         taskManager.addNewEpic(epic);
         Epic epic2 = new Epic("Test getPrioritizedEpic2", "Test Test getPrioritizedEpic2 description");
@@ -37,17 +36,25 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         Subtask subtask = new Subtask("Test getPrioritizedSubtask1",
                 "Test getPrioritizedSubtask1 description");
         Subtask subtask2 = new Subtask("Test getPrioritizedSubtask2",
-                "Test getPrioritizedSubtask2 description", "07.02.2023 10:00", 45);
+                "Test getPrioritizedSubtask2 description", "06.02.2023 10:00", 60);
         Subtask subtask3 = new Subtask("Test getPrioritizedSubtask3",
-                "Test getPrioritizedSubtask3 description", "07.02.2023 11:00", 45);
+                "Test getPrioritizedSubtask3 description", "06.02.2023 11:00", 45);
+        Subtask subtask4 = new Subtask("Test getPrioritizedSubtask4",
+                "Test getPrioritizedSubtask4 description", "06.02.2023 08:00", 121);
+        Subtask subtask5 = new Subtask("Test getPrioritizedSubtask5",
+                "Test getPrioritizedSubtask5 description", "06.02.2023 11:30", 10);
 
         subtask.setEpicId(epic);
         subtask2.setEpicId(epic);
-        subtask3.setEpicId(epic2);
+        subtask3.setEpicId(epic);
+        subtask4.setEpicId(epic);
+        subtask5.setEpicId(epic);
 
         taskManager.addSubtask(subtask);
         taskManager.addSubtask(subtask2);
         taskManager.addSubtask(subtask3);
+        taskManager.addSubtask(subtask4);
+        taskManager.addSubtask(subtask5);
 
         taskManager.updateEpic(epic);
         taskManager.updateEpic(epic2);
@@ -309,7 +316,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.addNewTask(task);
 
         Map<Integer, Task> tasks = taskManager.removeTask(task.getId());
-        taskManager.removeTask(task.getId());
 
         assertEquals(0, tasks.size(), "Задачи не удаляются.");
     }
@@ -335,41 +341,10 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         task.setEpicId(epic);
         taskManager.addSubtask(task);
 
-        Map<Integer, Subtask> tasks = taskManager.removeSubtask(task.getId());
-        taskManager.removeSubtask(task.getId());
-
-        assertEquals(0, tasks.size(), "Задачи не удаляются.");
-    }
-
-    @Test
-    void setDurationEpic() throws IOException {
-        Epic epic = new Epic("Test getDurationSubtasks", "Test getDurationSubtasks description");
-        taskManager.addNewEpic(epic);
-        Subtask subtask = new Subtask("Test getDurationSubtasks",
-                "Test getDurationSubtasks description",
-                "17.02.2023 10:00",
-                120
-        );
-        subtask.setEpicId(epic);
-        taskManager.addSubtask(subtask);
-
-        Subtask subtask2 = new Subtask("Test getDurationSubtasks",
-                "Test getDurationSubtasks description",
-                "18.02.2023 10:00",
-                60);
-        subtask2.setEpicId(epic);
-        taskManager.addSubtask(subtask2);
-
         taskManager.updateEpic(epic);
 
-        taskManager.setDurationAndTimeEpic(epic);
+        Map<Integer, Subtask> tasks = taskManager.removeSubtask(task.getId());
 
-        int durationEpic = (int) epic.getDuration().toMinutes();
-
-        assertEquals(1500, durationEpic, "Время выполенения эпика расчитывается неверно.");
-        assertEquals("17.02.2023 10:00", epic.getStartTimeInString(),
-                "Дата начала Эпика считается неверно.");
-        assertEquals("18.02.2023 11:00", epic.getEndTimeInString(),
-                "Дата конца Эпика считается неверно.");
+        assertEquals(0, tasks.size(), "Задачи не удаляются.");
     }
 }

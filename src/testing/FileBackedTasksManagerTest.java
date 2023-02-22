@@ -6,7 +6,6 @@ import model.Subtask;
 import model.Task;
 
 import service.FileBackedTasksManager;
-import service.InMemoryTaskManager;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +18,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     private static String pathFile = "HistoryLoadTest.csv";
 
     @Override
-    void setTaskManager(){
+    void setTaskManager() {
         taskManager = new FileBackedTasksManager();
     }
 

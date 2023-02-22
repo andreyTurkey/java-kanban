@@ -1,13 +1,9 @@
 package model;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
-public class CustomLinkedList{
-
-    private HashMap<Integer, Node> nodes = new HashMap<>();
+public class CustomLinkedList {
+    private Map<Integer, Node> nodes = new HashMap<>();
 
     private int size = 0;
 
@@ -57,8 +53,6 @@ public class CustomLinkedList{
 
     public Node<Task> getLast() {
         final Node<Task> l = tail;
-        /*if (l == null)
-            throw new NoSuchElementException();*/
         return l;
     }
 
@@ -90,11 +84,11 @@ public class CustomLinkedList{
         return f;
     }
 
-    public HashMap<Integer, Node> getNodes() {
+    public Map<Integer, Node> getNodes() {
         return nodes;
     }
 
-    public void setNodes(HashMap<Integer, Node> nodes) {
+    public void setNodes(Map<Integer, Node> nodes) {
         this.nodes = nodes;
     }
 

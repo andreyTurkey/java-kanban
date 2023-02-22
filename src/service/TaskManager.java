@@ -6,22 +6,19 @@ import model.Task;
 
 import java.io.IOException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
+import java.util.*;
 
 public interface TaskManager {
 
-    public HashMap<Integer, Task> getTasksStorages();
+    public Map<Integer, Task> getTasksStorages();
 
-    public HashMap<Integer, Epic> getEpicsStorage();
+    public Map<Integer, Epic> getEpicsStorage();
 
-    public HashMap<Integer, Subtask> getSubtaksStorage();
+    public Map<Integer, Subtask> getSubtaksStorage();
+
     public void timeValidator(Task newTask);
 
     public Set<Task> getPrioritizedTasks();
-
-    public void setDurationAndTimeEpic(Epic epic);
 
     public void addNewTask(Task task) throws IOException;
 
@@ -36,18 +33,18 @@ public interface TaskManager {
     public void updateStatus(Epic epic);
 
     // Методы получение списка задач
-    public ArrayList<Task> getListTask();
+    public List<Task> getListTask();
 
-    public ArrayList<Epic> getListEpic();
+    public List<Epic> getListEpic();
 
-    public ArrayList<Subtask> getListSubtask();
+    public List<Subtask> getListSubtask();
 
     // Методы очистки хэш мапы
-    public HashMap<Integer, Task> clearTasks() throws IOException;
+    public Map<Integer, Task> clearTasks() throws IOException;
 
-    public HashMap<Integer, Epic> clearEpics() throws IOException;
+    public Map<Integer, Epic> clearEpics() throws IOException;
 
-    public HashMap<Integer, Subtask> clearSubtasks() throws IOException;
+    public Map<Integer, Subtask> clearSubtasks() throws IOException;
 
     // Методы получения по ID
     public Task getWithIdTask(int id) throws IOException;
@@ -57,11 +54,11 @@ public interface TaskManager {
     public Subtask getWithIdSubtasks(int id) throws IOException;
 
     // Методы удаления задач по ID
-    public HashMap<Integer, Task> removeTask(int idRemovedTask) throws IOException;
+    public Map<Integer, Task> removeTask(int idRemovedTask) throws IOException;
 
-    public HashMap<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException;
+    public Map<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException;
 
-    public HashMap<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException;
+    public Map<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException;
 
     public void printTask();
 
@@ -78,7 +75,6 @@ public interface TaskManager {
     public void epicFromFile(Epic epic);
 
     public void subtaskFromFile(Subtask subtask);
-
 }
 
 

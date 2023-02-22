@@ -18,9 +18,9 @@ public class Task {
     protected String name;
     protected String description;
     protected Status status;
-    protected  Type type = Type.TASK;
+    protected Type type = Type.TASK;
     protected Duration duration;
-    protected LocalDateTime  startTime;
+    protected LocalDateTime startTime;
     protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public Task(String name, String discription) {
@@ -48,10 +48,6 @@ public class Task {
         return endTime;
     }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -60,7 +56,7 @@ public class Task {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    protected void setDuration(Duration duration) {
         this.duration = duration;
     }
 
@@ -68,7 +64,7 @@ public class Task {
         return startTime;
     }
 
-    public String getStartTimeInString(){
+    public String getStartTimeInString() {
         String str = startTime.format(formatter);
         return str;
     }
@@ -82,6 +78,7 @@ public class Task {
     }
 
     public void setStatus(Status status) {
+
         this.status = status;
     }
 
@@ -123,7 +120,11 @@ public class Task {
 
     @Override
     public String toString() {
-        return name + " " + getId() + " " + getStatus() + startTime.format(formatter) + " " + duration;
+        if (startTime != null) {
+            return name + " " + getId() + " " + getStatus() + startTime.format(formatter) + " " + duration;
+        } else {
+            return name + " " + getId() + " " + getStatus();
+        }
     }
 
     public String toString(Task task) {
@@ -167,7 +168,7 @@ public class Task {
             task.setDuration(Duration.parse(parts[DURATION_INDEX]));
         }
         if (startTime != null) {
-            task.setStartTime(LocalDateTime.parse(parts[STARTTIME_INDEX], formatter));
+            startTime = LocalDateTime.parse(parts[STARTTIME_INDEX], formatter);
         }
         return task;
     }

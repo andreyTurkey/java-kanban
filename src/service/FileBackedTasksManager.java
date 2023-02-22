@@ -6,13 +6,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
     private static String path = "History.csv";
     private static final int TYPE_INDEX = 1;
 
     public static void main(String[] args) throws IOException {
-        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(path));
+        //FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(path));
 
         /*TaskManager taskManager = Managers.getDefaultFileBacked();
 
@@ -245,42 +246,42 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public HashMap<Integer, Task> removeTask(int idRemovedTask) throws IOException {
+    public Map<Integer, Task> removeTask(int idRemovedTask) throws IOException {
         super.removeTask(idRemovedTask);
         save();
         return new HashMap(tasksStorages);
     }
 
     @Override
-    public HashMap<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException {
+    public Map<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException {
         super.removeEpic(idRemovedEpic);
         save();
         return new HashMap(epicsStorage);
     }
 
     @Override
-    public HashMap<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException {
+    public Map<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException {
         super.removeSubtask(idRemovedSubtasks);
         save();
         return new HashMap(subtaksStorage);
     }
 
     @Override
-    public HashMap<Integer, Task> clearTasks() throws IOException {
+    public Map<Integer, Task> clearTasks() throws IOException {
         super.clearTasks();
         save();
         return new HashMap(tasksStorages);
     }
 
     @Override
-    public HashMap<Integer, Epic> clearEpics() throws IOException {
+    public Map<Integer, Epic> clearEpics() throws IOException {
         super.clearEpics();
         save();
         return new HashMap(epicsStorage);
     }
 
     @Override
-    public HashMap<Integer, Subtask> clearSubtasks() throws IOException {
+    public Map<Integer, Subtask> clearSubtasks() throws IOException {
         super.clearSubtasks();
         save();
         return new HashMap(subtaksStorage);
