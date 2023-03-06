@@ -1,10 +1,7 @@
 package model;
 
-import javax.swing.text.DateFormatter;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Task {
@@ -18,29 +15,40 @@ public class Task {
     protected String name;
     protected String description;
     protected Status status;
-    protected Type type = Type.TASK;
+    protected Type type;
     protected Duration duration;
     protected LocalDateTime startTime;
-    protected final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-    public Task(String name, String discription) {
+    public Task(String name, String description) {
         this.name = name;
-        this.description = discription;
+        this.description = description;
         this.status = Status.NEW;
+        this.type = Type.TASK;
     }
 
     public Task() {
         this.name = "";
         this.description = "";
         this.status = Status.NEW;
+        this.type = Type.TASK;
     }
 
-    public Task(String name, String discription, String startTime, int durationMinutes) {
+    public Task(String name, String description, String startTime, int duration) {
         this.name = name;
-        this.description = discription;
+        this.description = description;
         this.status = Status.NEW;
-        this.startTime = LocalDateTime.parse(startTime, formatter);
-        this.duration = Duration.ofMinutes(durationMinutes);
+        this.startTime = LocalDateTime.parse(startTime, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+        this.duration = Duration.ofMinutes(duration);
+        this.type = Type.TASK;
+    }
+
+    public Task(String name, String description, LocalDateTime startTime, int duration) {
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
+        this.startTime = startTime;
+        this.duration = Duration.ofMinutes(duration);
+        this.type = Type.TASK;
     }
 
     public LocalDateTime getEndTime() {
@@ -48,15 +56,11 @@ public class Task {
         return endTime;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public Duration getDuration() {
         return duration;
     }
 
-    protected void setDuration(Duration duration) {
+    public void setDuration(Duration duration) {
         this.duration = duration;
     }
 
@@ -65,12 +69,8 @@ public class Task {
     }
 
     public String getStartTimeInString() {
-        String str = startTime.format(formatter);
+        String str = startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
         return str;
-    }
-
-    public DateTimeFormatter getFormatter() {
-        return formatter;
     }
 
     public void setStart(LocalDateTime startTime) {
@@ -102,7 +102,7 @@ public class Task {
         this.name = name;
     }
 
-    public String getDiscription() {
+    public String getDescription() {
         return description;
     }
 
@@ -121,15 +121,15 @@ public class Task {
     @Override
     public String toString() {
         if (startTime != null) {
-            return name + " " + getId() + " " + getStatus() + startTime.format(formatter) + " " + duration;
+            return name + " " + getId() + " " + getStatus() + startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")) + " " + duration;
         } else {
             return name + " " + getId() + " " + getStatus();
         }
     }
 
-    public String toString(Task task) {
+    public String toStringForFile(Task task) {
         if (duration != null) {
-            return String.format("%d,%S,%s,%S,%s,%s,%s\n", id, type, name, status, description, duration, startTime.format(formatter));
+            return String.format("%d,%S,%s,%S,%s,%s,%s\n", id, type, name, status, description, duration, startTime.format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm")));
         }
         return String.format("%d,%S,%s,%S,%s\n", id, type, name, status, description);
     }
@@ -168,7 +168,7 @@ public class Task {
             task.setDuration(Duration.parse(parts[DURATION_INDEX]));
         }
         if (startTime != null) {
-            startTime = LocalDateTime.parse(parts[STARTTIME_INDEX], formatter);
+            startTime = LocalDateTime.parse(parts[STARTTIME_INDEX], DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
         }
         return task;
     }

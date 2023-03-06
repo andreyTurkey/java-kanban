@@ -44,9 +44,11 @@ public class CustomLinkedList {
     }
 
     public void removeNode(Node<Task> node) {
-        for (Node<Task> x = head; x != null; x = x.getNext()) {
-            if (node.equals(x)) {
-                unlink(x);
+        if (node != null) {
+            for (Node<Task> x = head; x != null; x = x.getNext()) {
+                if (node.equals(x)) {
+                    unlink(x);
+                }
             }
         }
     }

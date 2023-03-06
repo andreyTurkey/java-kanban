@@ -26,6 +26,11 @@ public class InMemoryTaskManager implements TaskManager {
         return subtaksStorage;
     }
 
+    @Override
+    public HistoryManager getInMemoryHistoryManager() {
+        return inMemoryHistoryManager;
+    }
+
     protected Comparator<Task> comparator = new Comparator<Task>() {
         @Override
         public int compare(Task task1, Task task2) {
@@ -53,7 +58,7 @@ public class InMemoryTaskManager implements TaskManager {
                     if (!newTask.getStartTime().isAfter(task.getEndTime().minusSeconds(1))
                             && !newTask.getEndTime().isBefore(task.getStartTime().plusSeconds(1))) {
                         throw new IllegalStateException("Введенное время для задачи " + newTask +
-                                " занято задачей " + task.getName() + "\n" +
+                                " занято задачей " + task + "\n" +
                                 "Выберите другое время");
                     }
                     if (newTask.getStartTime().isBefore(task.getStartTime())
@@ -74,12 +79,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addNewTask(Task task) throws IOException, IllegalStateException {
+    public void addNewTask(Task task) throws IOException, IllegalStateException, InterruptedException {
         try {
             timeValidator(task);
         } catch (IllegalStateException exc) {
-            System.out.println(exc.getMessage());
-            return;
+            throw new IllegalStateException(exc.getMessage());
+            //System.out.println(exc.getMessage());
+            //return;
         }
         task.setId(counter++);
         tasksStorages.put(task.getId(), task);
@@ -91,8 +97,9 @@ public class InMemoryTaskManager implements TaskManager {
         try {
             timeValidator(task);
         } catch (IllegalStateException exc) {
-            System.out.println(exc.getMessage());
-            return;
+            throw new IllegalStateException(exc.getMessage());
+            //System.out.println(exc.getMessage());
+            //return;
         }
         int idTask = task.getId();
         for (Integer idMap : tasksStorages.keySet()) {
@@ -106,9 +113,21 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
+    @Override
+    public List<Task> getAllTasks() {
+        List<Task> tasks = getListTask();
+        List<Epic> epics = getListEpic();
+        List<Subtask> subtasks = getListSubtask();
+        List<Task> allTasks = new ArrayList<>();
+        allTasks.addAll(tasks);
+        allTasks.addAll(epics);
+        allTasks.addAll(subtasks);
+        return allTasks;
+    }
+
 
     @Override
-    public void addNewEpic(Epic epic) throws IOException {
+    public void addNewEpic(Epic epic) throws IOException, InterruptedException {
         epic.setId(counter++);
         epicsStorage.put(epic.getId(), epic);
     }
@@ -134,12 +153,13 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void addSubtask(Subtask subtask) throws IOException, IllegalStateException {
+    public void addSubtask(Subtask subtask) throws IOException, IllegalStateException, InterruptedException {
         try {
             timeValidator(subtask);
         } catch (IllegalStateException exc) {
-            System.out.println(exc.getMessage());
-            return;
+            throw new IllegalStateException(exc.getMessage());
+            //System.out.println(exc.getMessage());
+            //return;
         }
         int idSubtask = subtask.getId();
         if (subtaksStorage.isEmpty()) {
@@ -254,19 +274,19 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Методы очистки хэш мапы
     @Override
-    public Map<Integer, Task> clearTasks() throws IOException {
+    public Map<Integer, Task> clearTasks() throws IOException, InterruptedException {
         tasksStorages.clear();
         return new HashMap(tasksStorages);
     }
 
     @Override
-    public Map<Integer, Epic> clearEpics() throws IOException {
+    public Map<Integer, Epic> clearEpics() throws IOException, InterruptedException {
         epicsStorage.clear();
         return new HashMap(epicsStorage);
     }
 
     @Override
-    public Map<Integer, Subtask> clearSubtasks() throws IOException {
+    public Map<Integer, Subtask> clearSubtasks() throws IOException, InterruptedException {
         Set<Integer> epicsId = new HashSet<>();
         for (Subtask subtask : subtaksStorage.values()) {
             prioritizedTasks.remove(subtask);
@@ -286,29 +306,39 @@ public class InMemoryTaskManager implements TaskManager {
 
     // Методы получения по ID
     @Override
-    public Task getWithIdTask(int id) throws IOException {
-        Task task = tasksStorages.get(id);
-        inMemoryHistoryManager.add(task);
-        return tasksStorages.get(id);
+    public Task getWithIdTask(int id) throws IOException, InterruptedException {
+        Task task;
+        if (tasksStorages.containsKey(id)) {
+            inMemoryHistoryManager.add(tasksStorages.get(id));
+            return task = tasksStorages.get(id);
+        } else {
+            throw new IllegalStateException("ID " + "=" + " не найдено");
+        }
     }
 
     @Override
-    public Epic getWithIdEpics(int id) throws IOException {
-        Task task = epicsStorage.get(id);
-        inMemoryHistoryManager.add(task);
-        return epicsStorage.get(id);
+    public Epic getWithIdEpics(int id) throws IOException, InterruptedException {
+        if (epicsStorage.containsKey(id)) {
+            inMemoryHistoryManager.add(epicsStorage.get(id));
+            return epicsStorage.get(id);
+        } else {
+            throw new IllegalStateException("ID " + "=" + " не найдено");
+        }
     }
 
     @Override
-    public Subtask getWithIdSubtasks(int id) throws IOException {
-        Task task = subtaksStorage.get(id);
-        inMemoryHistoryManager.add(task);
-        return subtaksStorage.get(id);
+    public Subtask getWithIdSubtasks(int id) throws IOException, InterruptedException {
+        if (subtaksStorage.containsKey(id)) {
+            inMemoryHistoryManager.add(subtaksStorage.get(id));
+            return subtaksStorage.get(id);
+        } else {
+            throw new IllegalStateException("ID " + "=" + " не найдено");
+        }
     }
 
     // Методы удаления задач по ID
     @Override
-    public Map<Integer, Task> removeTask(int idRemovedTask) throws IOException {
+    public Map<Integer, Task> removeTask(int idRemovedTask) throws IOException, InterruptedException {
         Task task = tasksStorages.get(idRemovedTask);
         tasksStorages.remove(idRemovedTask);
         prioritizedTasks.remove(task);
@@ -317,14 +347,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException {
+    public Map<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException, InterruptedException {
         Epic epic = epicsStorage.get(idRemovedEpic);
         if (epic.getSubtaskIds().size() != 0) {
             List<Integer> subtasksId = epic.getSubtaskIds();
             for (Integer id : subtasksId) {
-                subtaksStorage.remove(id);
                 Subtask subtask = subtaksStorage.get(id);
                 prioritizedTasks.remove(subtask);
+                subtaksStorage.remove(id);
                 inMemoryHistoryManager.remove(id);
             }
         }
@@ -334,7 +364,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Map<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException {
+    public Map<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException, InterruptedException {
         Subtask subtask = subtaksStorage.get(idRemovedSubtasks);
         prioritizedTasks.remove(subtask);
         if (subtask != null) {
@@ -355,6 +385,12 @@ public class InMemoryTaskManager implements TaskManager {
             inMemoryHistoryManager.remove(idRemovedSubtasks);
         }
         return new HashMap(subtaksStorage);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        List<Task> history = inMemoryHistoryManager.getHistory();
+        return history;
     }
 
     @Override

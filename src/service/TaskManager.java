@@ -20,15 +20,15 @@ public interface TaskManager {
 
     public Set<Task> getPrioritizedTasks();
 
-    public void addNewTask(Task task) throws IOException;
+    public void addNewTask(Task task) throws IOException, InterruptedException;
 
     public void updateTask(Task task) throws IOException;
 
-    public void addNewEpic(Epic epic) throws IOException;
+    public void addNewEpic(Epic epic) throws IOException, InterruptedException;
 
     public void updateEpic(Epic epic) throws IOException;
 
-    public void addSubtask(Subtask subtask) throws IOException;
+    public void addSubtask(Subtask subtask) throws IOException, InterruptedException;
 
     public void updateStatus(Epic epic);
 
@@ -40,25 +40,29 @@ public interface TaskManager {
     public List<Subtask> getListSubtask();
 
     // Методы очистки хэш мапы
-    public Map<Integer, Task> clearTasks() throws IOException;
+    public Map<Integer, Task> clearTasks() throws IOException, InterruptedException;
 
-    public Map<Integer, Epic> clearEpics() throws IOException;
+    public Map<Integer, Epic> clearEpics() throws IOException, InterruptedException;
 
-    public Map<Integer, Subtask> clearSubtasks() throws IOException;
+    public Map<Integer, Subtask> clearSubtasks() throws IOException, InterruptedException;
 
     // Методы получения по ID
-    public Task getWithIdTask(int id) throws IOException;
+    public Task getWithIdTask(int id) throws IOException, InterruptedException;
 
-    public Epic getWithIdEpics(int id) throws IOException;
+    public Epic getWithIdEpics(int id) throws IOException, InterruptedException;
 
-    public Subtask getWithIdSubtasks(int id) throws IOException;
+    public Subtask getWithIdSubtasks(int id) throws IOException, InterruptedException;
 
     // Методы удаления задач по ID
-    public Map<Integer, Task> removeTask(int idRemovedTask) throws IOException;
+    public Map<Integer, Task> removeTask(int idRemovedTask) throws IOException, InterruptedException;
 
-    public Map<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException;
+    public Map<Integer, Epic> removeEpic(int idRemovedEpic) throws IOException, InterruptedException;
 
-    public Map<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException;
+    public Map<Integer, Subtask> removeSubtask(int idRemovedSubtasks) throws IOException, InterruptedException;
+
+    public List<Task> getHistory();
+
+    public List<Task> getAllTasks();
 
     public void printTask();
 
@@ -75,6 +79,8 @@ public interface TaskManager {
     public void epicFromFile(Epic epic);
 
     public void subtaskFromFile(Subtask subtask);
+
+    public HistoryManager getInMemoryHistoryManager();
 }
 
 

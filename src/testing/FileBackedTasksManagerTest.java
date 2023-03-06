@@ -39,7 +39,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     }
 
     @Test
-    public void save() throws IOException {
+    public void save() throws IOException, InterruptedException {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager();
 
         fileBackedTasksManager.save();
