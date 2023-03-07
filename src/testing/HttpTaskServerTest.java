@@ -1,9 +1,6 @@
 package testing;
 
-import API.DurationAdapter;
-import API.HttpTaskServer;
-import API.KVServer;
-import API.LocalDateAdapter;
+import api.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -32,12 +29,8 @@ public class HttpTaskServerTest {
     private final Epic epic1 = new Epic("Epic 1", "Epic 1");
     private final Subtask subtask1 = new Subtask("SubTask 1", "SubTask 1", "01.01.2023 11:00", 10);
 
-    public HttpTaskServerTest() {
-    }
-
     @BeforeEach
     public void startServer() throws IOException {
-        //
         client = HttpClient.newHttpClient();
         kvServer = new KVServer();
         kvServer.start();

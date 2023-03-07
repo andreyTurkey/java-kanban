@@ -1,7 +1,7 @@
 package testing;
 
-import API.HttpTaskManager;
-import API.KVServer;
+import service.HttpTaskManager;
+import api.KVServer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +21,7 @@ public class HttpTaskManagerTest extends TaskManagerTest<HttpTaskManager> {
     KVServer kvServer = new KVServer();
 
     public HttpTaskManagerTest() throws IOException {
+        taskManager = new HttpTaskManager();
     }
 
     @Override

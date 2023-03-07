@@ -1,4 +1,4 @@
-package API;
+package api;
 
 import com.google.gson.*;
 
@@ -14,7 +14,7 @@ public class KVTaskClient {
 
     public KVTaskClient(String uri) {
         client = HttpClient.newHttpClient();
-        apiKey = 100; //  apiKey = getApiKey(uri);
+        apiKey = 100;
     }
 
     public void put(String saveUri, String json) { // Отправляет текущее состояние менеджера

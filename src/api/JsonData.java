@@ -1,13 +1,13 @@
-package API;
+package api;
 
 import java.util.List;
 
-public class DataForJson {
+public class JsonData {
     private String[] tasks;
     private String history;
     private Object[] prioritize;
 
-    public DataForJson(List<String> tasks, String history, List<String> prioritize) {
+    public JsonData(List<String> tasks, String history, List<String> prioritize) {
         this.tasks = getTasksArray(tasks);
         this.history = history;
         this.prioritize = getPrioritizeArray(prioritize);

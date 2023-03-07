@@ -1,4 +1,4 @@
-package API;
+package api;
 
 public enum Endpoint {
     GET_ALLTASKS,
@@ -20,6 +20,9 @@ public enum Endpoint {
     DELETE_SUBTASK,
     DELETE_ALLEPICS,
     GET_PRIORITIZE,
-    GET_EPICSUBTASK,
+    GET_EPIC_SUBTASK,
+    GET_EPIC_HANDLERS,
+    GET_TASK_HANDLERS,
+    GET_SUBTASK_HANDLERS,
     UNKNOWN
 }

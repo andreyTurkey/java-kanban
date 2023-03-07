@@ -1,23 +1,21 @@
-package API;
+package service;
 
+import api.JsonData;
+import api.KVTaskClient;
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
+
 import model.*;
-import service.FileBackedTasksManager;
-import service.Managers;
-import service.TaskManager;
 
 import java.io.IOException;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.*;
 
 public class HttpTaskManager extends FileBackedTasksManager {
-    private static final String uri = "http://localhost:8080/register";
-    private static final String loadUri = "http://localhost:8080/load";
-    private final String saveUri = "http://localhost:8080/save";
-    private static KVTaskClient kvTaskClient = new KVTaskClient(uri);
+    private static final String URI = "http://localhost:8080/register";
+    private static final String LOADURI = "http://localhost:8080/load";
+
+    private static final String SAVEURI = "http://localhost:8080/save";
+    private  KVTaskClient kvTaskClient = new KVTaskClient(URI);
 
     public static void main(String[] args) throws IOException, InterruptedException {
 
@@ -49,7 +47,7 @@ public class HttpTaskManager extends FileBackedTasksManager {
         taskManager.getWithIdEpics(4);
         taskManager.getWithIdEpics(5);
 
-        /*TaskManager newTaskManager = HttpTaskManager.loadFromServer(loadUri);
+        /*TaskManager newTaskManager = HttpTaskManager.loadFromServer(LOADURI);
         List<Task> tasks = newTaskManager.getListTask();
         for (Task task : tasks) {
             System.out.println(task);
@@ -71,12 +69,12 @@ public class HttpTaskManager extends FileBackedTasksManager {
         newTaskManager.printHistory();*/
     }
 
-    public static HttpTaskManager loadFromServer(String loadUri) throws IOException, InterruptedException {
+    public static HttpTaskManager loadFromServer(String loadUri)  {
         HttpTaskManager httpTaskManager = new HttpTaskManager();
         String jsonData = httpTaskManager.kvTaskClient.load(loadUri);
         if (jsonData.length() != 0) {
             Gson gson = new Gson();
-            DataForJson savedData = gson.fromJson(jsonData, DataForJson.class);
+            JsonData savedData = gson.fromJson(jsonData, JsonData.class);
             String[] tasks = savedData.getTasks();
             String history = savedData.getHistory();
             List<String> tasksFromServer = new ArrayList<>();
@@ -128,8 +126,8 @@ public class HttpTaskManager extends FileBackedTasksManager {
             stringsPrioritize.add(taskToString);
         }
         String history = historyToString(inMemoryHistoryManager);
-        DataForJson dataForJson = new DataForJson(stringsTasks, history, stringsPrioritize);
-        String jsonTaskToHistory = gson.toJson(dataForJson, DataForJson.class);
-        kvTaskClient.put(saveUri, jsonTaskToHistory);
+        JsonData dataForJson = new JsonData(stringsTasks, history, stringsPrioritize);
+        String jsonTaskToHistory = gson.toJson(dataForJson, JsonData.class);
+        kvTaskClient.put(SAVEURI, jsonTaskToHistory);
     }
 }

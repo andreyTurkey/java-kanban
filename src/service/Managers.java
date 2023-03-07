@@ -1,10 +1,5 @@
 package service;
 
-import API.HttpTaskManager;
-import API.HttpTaskServer;
-
-import java.io.IOException;
-
 public class Managers {
     public static TaskManager getDefault() {
         return new HttpTaskManager();
