@@ -1,8 +1,9 @@
 # java-kanban
 ___
-## *На данном этапе программа Менеджер задач находится в стадии разработки.*  
-### Сейчас Менеджер умеет принимать данные и хранить их пока программа выполняется.
-___
-Каким будет конечный результат остается догадываться.
+## Task manager
 
-Repository for homework project.
+___
+
+This can help people manage time and tasks.  
+ * Application without build system
+ * Can be run in a development environment
